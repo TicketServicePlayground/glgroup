@@ -151,6 +151,10 @@ const MobileNav = ({datas, setShowNav, contactUs, type}) => {
                     <Link href={'/en'} locale={'en'} className={clsx(locale === 'en' ? (type ? "text-green-active" : "text-yellow-active") : (type ? "hover:text-green-active" : "hover:text-yellow-active text-white"))} onClick={()=>(setShowNav(false))}>
                         EN
                     </Link>
+                    <span className={clsx(styles.vertLine, type && styles.black)}></span>
+                    <Link href={'/id'} locale={'id'} className={clsx(locale === 'id' ? (type ? "text-green-active" : "text-yellow-active") : (type ? "hover:text-green-active" : "hover:text-yellow-active text-white"))} onClick={()=>(setShowNav(false))}>
+                        ID
+                    </Link>
                 </div>
             </div>
         </section>

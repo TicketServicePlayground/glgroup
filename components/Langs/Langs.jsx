@@ -27,6 +27,11 @@ const Langs = ({type, locale}) => {
                   className={clsx(loc === 'en' ? (type ? "text-green-active" : "text-yellow-active") : (type ? "hover:text-green-active" : "hover:text-yellow-active"))}>
                 EN
             </Link>
+            <span className={clsx(styles.vertLine, type && styles.black)}></span>
+            <Link href={'/id'+url}
+                  className={clsx(loc === 'id' ? (type ? "text-green-active" : "text-yellow-active") : (type ? "hover:text-green-active" : "hover:text-yellow-active"))}>
+                ID
+            </Link>
         </div>
     );
 };
