@@ -81,6 +81,9 @@ const  Footer = ({links, sitename, footer}) => {
                             {filteredLinks && filteredLinks.map((e, _uid)=>(
                                 <li key={_uid}><Link href={createLink(e.link)} key={_uid} className={'hover:text-yellow-active'}>{e.label}</Link></li>
                             ))}
+                            {footer.linksMenu && footer.linksMenu.map((e, _uid)=>(
+                                <li key={_uid}  className={'hover:text-yellow-active'}><Link href={createLink(e.link)}>{e.label}</Link></li>
+                            ))}
                         </ul>
                     </div>
                     <div className={styles.contactUs}>
@@ -101,15 +104,6 @@ const  Footer = ({links, sitename, footer}) => {
                                 </Link>
                             </div>
                         </div>
-
-                        {/*<div className={'flex items-center gap-4'}>*/}
-                        {/*    {socials && socials.map((e, _uid) => (*/}
-                        {/*        <Link href={e.link.cached_url}*/}
-                        {/*              key={_uid}>*/}
-                        {/*            <Image src={e.image.filename} width={'20'} height={'20'} alt={e.image.alt}></Image>*/}
-                        {/*        </Link>*/}
-                        {/*    ))}*/}
-                        {/*</div>*/}
                     </div>
                 </div>
 

@@ -298,6 +298,7 @@ export default async function LocalLayout({ children, params}) {
     offerLink: global.data.story?.content?.offerLink,
     contactUsLabel: global.data.story?.content?.contactUsLabel,
     address: global.data.story?.content?.address,
+    linksMenu: global.data.story?.content?.linksMenu,
   };
   const headMenu = global.data.story?.content.linkMenu[0];
   const menu = global.data.story?.content.linkMenu[1];
