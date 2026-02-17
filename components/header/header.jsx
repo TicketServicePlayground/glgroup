@@ -19,16 +19,8 @@ const Header = ({links, type, menu}) => {
     const number = links?.whatsappNumber;
     const locale = useLocale();
 
-    const createLink = (link) => {
-      if(locale === 'ru' && link.linktype === 'story'){
-        return '/ru/'+link.cached_url;
-      }else{
-          return link.cached_url;
-      }
-    }
-
     const filteredLinks = itemLinks.filter((e) => {
-        return !(locale === 'id' && e.link.url.includes('blog'));
+        return !(locale === 'id' && e.link.includes('blog'));
     })
 
     return (
@@ -51,7 +43,7 @@ const Header = ({links, type, menu}) => {
                 </div>
                 <div className={'flex gap-4 xl:gap-10 font-gilroy text-base font-normal items-center'}>
                     {filteredLinks && filteredLinks.map((e, _uid) => (
-                        <Link href={createLink(e.link)} key={_uid}
+                        <Link href={e.link} key={_uid}
                               className={'hover:text-yellow-active'}>
 
                             {e.label}</Link>
@@ -60,7 +52,7 @@ const Header = ({links, type, menu}) => {
                 <div className={'flex gap-5 xl:gap-10'}>
                     <div className={clsx('flex items-center gap-3 xl:gap-4', type && styles.imgBlack)}>
                         {socials && socials.map((e, _uid) => (
-                            <Link href={e.link.cached_url} key={_uid}>
+                            <Link href={e.link} key={_uid}>
                                 {/*{e.nameSoc === "facebook" && (*/}
                                 {/*    <i className={clsx(type ? styles.blackIcon : styles.whiteIcon)}>*/}
                                 {/*        <svg width="19" height="19" viewBox="0 0 20 20" fill="none"*/}
@@ -81,7 +73,7 @@ const Header = ({links, type, menu}) => {
                                 {/*        </svg>*/}
                                 {/*    </i>*/}
                                 {/*)}*/}
-                                {e.nameSoc === "telegram" && (
+                                {e.name === "telegram" && (
                                     <i className={clsx(type ? styles.blackIcon : styles.whiteIcon)}>
                                         <svg width="21" height="18" viewBox="0 0 21 18" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">

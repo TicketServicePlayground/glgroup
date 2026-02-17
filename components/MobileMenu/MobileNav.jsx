@@ -6,6 +6,7 @@ import clsx from "clsx";
 import Image from "next/image";
 import {useRouter} from "next/navigation";
 import {useLocale} from "next-intl";
+import {getStrapiMedia} from "@/lib/strapi/ui/getStrapiMedia";
 
 const MobileNav = ({datas, setShowNav, contactUs, type}) => {
     const number = datas?.whatsappNumber;
@@ -14,24 +15,25 @@ const MobileNav = ({datas, setShowNav, contactUs, type}) => {
     const filteredLinks = datas.links.filter((e) => {
         return !(locale === 'id' && e.link.url.includes('blog'));
     })
+    console.log(datas);
 
-    const createForm = (link) => {
-        if(locale === 'ru'){
-            return '/ru/'+link.cached_url;
-        }else if(locale === 'en' && link.linktype !== 'story'){
-            return '/en/'+link.cached_url;
-        }else{
-            return link.cached_url;
-        }
-    }
-
-    const createLink = (link) => {
-        if(locale === 'ru' && link.linktype === 'story'){
-            return '/ru/'+link.cached_url;
-        }else{
-            return link.cached_url;
-        }
-    }
+    // const createForm = (link) => {
+    //     if(locale === 'ru'){
+    //         return '/ru/'+link.cached_url;
+    //     }else if(locale === 'en' && link.linktype !== 'story'){
+    //         return '/en/'+link.cached_url;
+    //     }else{
+    //         return link.cached_url;
+    //     }
+    // }
+    //
+    // const createLink = (link) => {
+    //     if(locale === 'ru' && link.linktype === 'story'){
+    //         return '/ru/'+link.cached_url;
+    //     }else{
+    //         return link.cached_url;
+    //     }
+    // }
     return (
         <section className={clsx('fixed h-full w-full top-0 left-0', type ? 'bg-white' : 'bg-[#141414]')} id={'menu'}>
             <div className={clsx('flex lg:hidden items-center justify-between w-full px-5 mb-10', styles.content, type && styles.black)}>
@@ -100,45 +102,45 @@ const MobileNav = ({datas, setShowNav, contactUs, type}) => {
                 <div className={styles.block}>
                     {filteredLinks && filteredLinks.map((e, _uid) => (
                         <Link key={_uid}
-                              href={createLink(e.link)} onClick={()=>(setShowNav(false))}>{e.label}</Link>
+                              href={e.link} onClick={()=>(setShowNav(false))}>{e.label}</Link>
                     ))}
                 </div>
                 <div className={styles.socials}>
                     {datas?.socials && datas.socials.map((e, _uid) => (
-                        <Link href={e.link.cached_url}
+                        <Link href={e.link}
                               key={_uid} onClick={()=>(setShowNav(false))}>
-                            {type ? (<Image src={e.blackImg.filename} width={'34'} height={'34'} alt={e.blackImg.alt}></Image>):(
-                            <Image src={e.image.filename} width={'34'} height={'34'} alt={e.image.alt}></Image>
+                            {type ? (<Image src={getStrapiMedia(e.blackImage.url)} width={'34'} height={'34'} alt={e.blackImage.alternativeText}></Image>):(
+                            <Image src={getStrapiMedia(e.image.url)} width={'34'} height={'34'} alt={e.image.alternativeText}></Image>
                                 )}
                         </Link>
                     ))}
                 </div>
                 <div className={styles.contact}>
-                    <Link href={'mailto:' + datas.label}
+                    <Link href={'mailto:' + datas.mail}
                           className={'flex gap-3 items-center hover:text-yellow-active '} onClick={()=>(setShowNav(false))}>
                         {type ? (
-                            <Image src={datas.iconBlack.filename} width={'24'} height={'24'} alt={datas.iconBlack.alt}/>
+                            <Image src={getStrapiMedia(datas.iconBlack.url)} width={'24'} height={'24'} alt={datas.iconBlack.alternativeText}/>
                         ) : (
-                            <Image src={datas.icon.filename} width={'24'} height={'24'} alt={datas.icon.alt}/>
+                            <Image src={getStrapiMedia(datas.icon.url)} width={'24'} height={'24'} alt={datas.icon.alternativeText}/>
                         )}
 
-                        <span className={'font-gilroy font-bold text-sm'}>{datas.label}</span>
+                        <span className={'font-gilroy font-bold text-sm'}>{datas.mail}</span>
                     </Link>
                     <Link href={'https://wa.me/' + number} className="flex gap-3 hover:text-yellow-active" onClick={()=>(setShowNav(false))}>
                         {type ? (
-                            <Image src={datas.ImageWpBlock.filename} width={'24'} height={'24'}
+                            <Image src={getStrapiMedia(datas.ImageWpBlock.url)} width={'24'} height={'24'}
                                    alt={datas.ImageWpBlock.alt}/>
                         ): (
-                            <Image src={datas.imageWhatsapp.filename} width={'24'} height={'24'}
+                            <Image src={getStrapiMedia(datas.imageWhatsapp.url)} width={'24'} height={'24'}
                                    alt={datas.imageWhatsapp.alt}/>
                         )}
 
-                        <span className={'font-gilroy font-bold text-xl'}>{datas.numberWhatsapp}</span>
+                        <span className={'font-gilroy font-bold text-xl'}>{datas.whatsappLabel}</span>
                     </Link>
                 </div>
                 <div className={styles.contactUs}>
                     <Link
-                        href={createForm(contactUs.link)}
+                        href={contactUs.link.cached_url}
                         className={styles.button} onClick={()=>(setShowNav(false))}>
                         {contactUs.label}
                     </Link>

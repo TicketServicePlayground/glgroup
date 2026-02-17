@@ -49,6 +49,8 @@ import React, {Suspense} from "react";
 import {ModalSec} from "@/components/Modal/ModalSec";
 import ForModal from "@/components/ContactForm/forModal";
 import ButtonCTA from "@/components/ButtonCTA/ButtonCTA";
+import {fetchStrapi} from "@/lib/newApi";
+import {globalPopulate} from "@/lib/strapi/populates/global";
 
 
 
@@ -284,28 +286,59 @@ export default async function LocalLayout({ children, params}) {
   const global = await fetchData('global', {version: 'draft', language: params.locale})
   const contactForm = await fetchData('blog-contact', {version: 'draft', language: params.locale})
 
+  const allowedLocales = ["ru", "en", "id"];
+
+  const locale = allowedLocales.includes(params.locale)
+      ? params.locale
+      : "en";
+
+
+  const {data: globalStrapi
+  } = await fetchStrapi({
+     path: '/api/global',
+     query: {
+        populate: globalPopulate,
+       locale: locale,
+     },
+  });
+
+  console.log(globalStrapi?.header);
+
   const footer = {
-    title: global.data.story?.content?.title,
-    description: global.data.story?.content?.description,
-    contactLabel: global.data.story?.content?.contactLabel,
-    contactLink: global.data.story?.content?.contactLink,
-    navigationLabel: global.data.story?.content?.navigationLabel,
-    homeLinkLabel: global.data.story?.content?.homeLinkLabel,
-    copyright: global.data.story?.content?.copyright,
-    privacyLabel: global.data.story?.content?.privacyLabel,
-    privacyLink: global.data.story?.content?.privacyLink,
-    offerLabel: global.data.story?.content?.offerLabel,
-    offerLink: global.data.story?.content?.offerLink,
-    contactUsLabel: global.data.story?.content?.contactUsLabel,
-    address: global.data.story?.content?.address,
-    linksMenu: global.data.story?.content?.linksMenu,
+    title: globalStrapi?.footer?.title,
+    description: globalStrapi?.footer?.description,
+    contactLabel: globalStrapi?.footer?.contactLabel,
+    contactLink: globalStrapi?.footer?.contactLink,
+    navigationLabel: globalStrapi?.footer?.navigationLabel,
+    homeLinkLabel: globalStrapi?.footer?.homeLinkLabel,
+    copyright: globalStrapi?.footer?.copyright,
+    privacyLabel: globalStrapi?.footer?.privacyLabel,
+    privacyLink: globalStrapi?.footer?.privacyLink,
+    offerLabel: globalStrapi?.footer?.offerLabel,
+    offerLink: globalStrapi?.footer?.offerLink,
+    contactUsLabel: globalStrapi?.footer?.contactUsLabel,
+    address: globalStrapi?.footer?.address,
+    linksMenu: globalStrapi?.footer?.linkBlock,
+   };
+
+  const headMenu = {
+      links: globalStrapi?.header?.menu,
+      socials: globalStrapi?.header?.socials,
+      mail: globalStrapi?.header?.email,
+      icon: globalStrapi?.header?.icon,
+      iconBlack: globalStrapi?.header?.iconBlack,
+      imageWhatsapp: globalStrapi?.header?.imageWhatsapp,
+      ImageWpBlock: globalStrapi?.header?.imageWpBlack,
+      whatsappNumber: globalStrapi?.header?.numberWhatsapp,
+      whatsappLabel: globalStrapi?.header?.whatsappLabel,
   };
-  const headMenu = global.data.story?.content.linkMenu[0];
+  //console.log(headMenu);
   const menu = global.data.story?.content.linkMenu[1];
+
 
   return (
       <StoryblokProvider>
-        <html lang={params.locale}>
+        <html lang={locale}>
           <body className={clsx(inter.className, Gilroy.variable, Formular.variable)}>
           <script
               src="https://challenges.cloudflare.com/turnstile/v0/api.js"
@@ -314,7 +347,7 @@ export default async function LocalLayout({ children, params}) {
           ></script>
           <GoogleTagManager gtmId={"GTM-W94Q2T3S"}/>
           <GoogleAnalytics gaId="G-F5H6Q18BRV" />
-          <NextIntlClientProvider locale={params.locale}>
+          <NextIntlClientProvider locale={locale}>
             <Suspense fallback={null}>
               <UTMParamsProvider />
             </Suspense>
@@ -325,7 +358,7 @@ export default async function LocalLayout({ children, params}) {
             </footer>
             <ScrollToTop />
             <CookieAlert data={global.data.story.content.CookieMessage} />
-            <ForModal locale={params.locale} />
+            <ForModal locale={locale} />
           </NextIntlClientProvider>
           <Script id={'clarity-script'} strategy={'afterInteractive'}  dangerouslySetInnerHTML={{
             __html: `        

@@ -4,23 +4,16 @@ import Link from "next/link";
 import Image from "next/image";
 import clsx from "clsx";
 import {useLocale} from "next-intl";
+import {getStrapiMedia} from "@/lib/strapi/ui/getStrapiMedia";
 
 const  Footer = ({links, sitename, footer}) => {
     const itemLinks = links?.links;
     const socials = links?.socials;
-    const mail = links?.label;
+    const mail = links?.mail;
     const mailIcon = links?.icon;
-    const whatsappNum = links?.numberWhatsapp;
+    const whatsappNum = links?.whatsappLabel;
     const whatsappIcon = links?.imageWhatsapp;
     const number = links?.whatsappNumber;
-    const createLink = (link) => {
-        if(locale === 'ru' && link.linktype === 'story'){
-            return '/ru/'+link.cached_url;
-        }else{
-            return link.cached_url;
-        }
-    }
-
     const locale = useLocale();
 
     const filteredLinks = itemLinks.filter((e) => {
@@ -67,7 +60,7 @@ const  Footer = ({links, sitename, footer}) => {
                     <div className={styles.description}>
                         {footer.description}
                     </div>
-                    <Link href={createLink(footer.contactLink)} className={styles.contact}>
+                    <Link href={footer.contactLink} className={styles.contact}>
                         {footer.contactLabel}
                     </Link>
                 </div>
@@ -79,10 +72,10 @@ const  Footer = ({links, sitename, footer}) => {
                         <ul>
                             <li><Link href={`/${locale}`} className={'hover:text-yellow-active'}>{footer.homeLinkLabel}</Link></li>
                             {filteredLinks && filteredLinks.map((e, _uid)=>(
-                                <li key={_uid}><Link href={createLink(e.link)} key={_uid} className={'hover:text-yellow-active'}>{e.label}</Link></li>
+                                <li key={_uid}><Link href={e.link} key={_uid} className={'hover:text-yellow-active'}>{e.label}</Link></li>
                             ))}
                             {footer.linksMenu && footer.linksMenu.map((e, _uid)=>(
-                                <li key={_uid}  className={'hover:text-yellow-active'}><Link href={createLink(e.link)}>{e.label}</Link></li>
+                                <li key={_uid}  className={'hover:text-yellow-active'}><Link href={e.link}>{e.label}</Link></li>
                             ))}
                         </ul>
                     </div>
@@ -92,12 +85,12 @@ const  Footer = ({links, sitename, footer}) => {
                             {footer.contactUsLabel}</span>
                             <div className={'flex flex-col gap-3'}>
                                 <Link href={'https://wa.me/'+number} className="flex gap-4 hover:text-yellow-active">
-                                    <Image src={whatsappIcon.filename} width={'21'} height={'21'}
-                                           alt={whatsappIcon.alt}/>
+                                    <Image src={getStrapiMedia(whatsappIcon.url)} width={'21'} height={'21'}
+                                           alt={whatsappIcon.alternativeText}/>
                                     <span className={clsx('font-gilroy font-bold', styles.wp)}>{whatsappNum}</span>
                                 </Link>
                                 <Link href={'mailto:'+mail} className={'flex gap-4 items-center hover:text-yellow-active'}>
-                                    <Image src={mailIcon.filename} width={'24'} height={'24'} alt={mailIcon.alt}/>
+                                    <Image src={getStrapiMedia(mailIcon.url)} width={'24'} height={'24'} alt={mailIcon.alternativeText}/>
                                     <span className={clsx('font-gilroy font-bold', styles.email)}>{mail}</span>
                                 </Link>
                                 <Link href={`/${locale}/contacts`} className={'font-gilroy text-lg font-normal hover:text-yellow-active'}>{footer.address}
@@ -113,10 +106,10 @@ const  Footer = ({links, sitename, footer}) => {
                     {footer.copyright}
                 </div>
                 <div className={styles.links}>
-                    <Link href={footer.privacyLink.linktype === "story" && !footer.privacyLink.prep ?  "/"+footer.privacyLink.cached_url : footer.privacyLink.cached_url} className={styles.confident}>
+                    <Link href={footer.privacyLink} className={styles.confident}>
                         {footer.privacyLabel}
                     </Link>
-                    <Link href={footer.offerLink.linktype === "story" && !footer.offerLink.prep ?  "/"+footer.offerLink.cached_url : footer.offerLink.cached_url} className={styles.publicOffer}>
+                    <Link href={footer.offerLink} className={styles.publicOffer}>
                         {footer.offerLabel}
                     </Link>
                 </div>
