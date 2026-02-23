@@ -12,7 +12,7 @@ const MobileNav = ({datas, setShowNav, contactUs, type}) => {
     const number = datas?.whatsappNumber;
     const locale = useLocale();
 
-    const filteredLinks = datas.links.filter((e) => {
+    const filteredLinks = (datas?.links || []).filter((e) => {
         return !(locale === 'id' && e.link.url.includes('blog'));
     })
     console.log(datas);

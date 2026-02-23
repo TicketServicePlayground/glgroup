@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 import {render} from "storyblok-rich-text-react-renderer";
 import styles from "./CookieAlert.module.scss"
 const CookieAlert = ({data}) => {
-    const [alertCookie, setAlertCookie] = useState(true);
+    const [alertCookie, setAlertCookie] = useState(!!data);
     function setOff(){
         Cookies.set("Cookies", true);
         setAlertCookie(false);

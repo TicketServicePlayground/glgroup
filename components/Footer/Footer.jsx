@@ -8,6 +8,7 @@ import {getStrapiMedia} from "@/lib/strapi/ui/getStrapiMedia";
 
 const  Footer = ({links, sitename, footer}) => {
     const itemLinks = links?.links;
+    if (!itemLinks) return null;
     const socials = links?.socials;
     const mail = links?.mail;
     const mailIcon = links?.icon;
@@ -16,7 +17,7 @@ const  Footer = ({links, sitename, footer}) => {
     const number = links?.whatsappNumber;
     const locale = useLocale();
 
-    const filteredLinks = itemLinks.filter((e) => {
+    const filteredLinks = (itemLinks || []).filter((e) => {
         return !(locale === 'id' && e.link.url.includes('blog'));
     })
 

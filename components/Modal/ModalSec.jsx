@@ -9,7 +9,7 @@ import React from "react";
 export function ModalSec({contactForm}) {
     const { isOpen, close, data } = useModalContact();
 
-    if (!isOpen) return null;
+    if (!isOpen || !contactForm?.data?.story?.content?.body?.[0]) return null;
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center">

@@ -19,7 +19,7 @@ const Header = ({links, type, menu}) => {
     const number = links?.whatsappNumber;
     const locale = useLocale();
 
-    const filteredLinks = itemLinks.filter((e) => {
+    const filteredLinks = (itemLinks || []).filter((e) => {
         return !(locale === 'id' && e.link.includes('blog'));
     })
 
@@ -36,10 +36,10 @@ const Header = ({links, type, menu}) => {
                                style={{width: "59px"}}
                         />
                         <span
-                            className={'h-fit max-w-[100px] xl:max-w-[136px] font-extrabold text-base xl:text-xl uppercase'}>{menu.siteName}</span>
+                            className={'h-fit max-w-[100px] xl:max-w-[136px] font-extrabold text-base xl:text-xl uppercase'}>{menu?.siteName}</span>
                     </Link>
                     <span
-                        className={'w-fit font-gilroy text-sm lg:text-desc lowercase lg:max-w-[119px] xl:max-w-[139px] leading-4 lg:leading-3.5'}>{menu.siteDescription}</span>
+                        className={'w-fit font-gilroy text-sm lg:text-desc lowercase lg:max-w-[119px] xl:max-w-[139px] leading-4 lg:leading-3.5'}>{menu?.siteDescription}</span>
                 </div>
                 <div className={'flex gap-4 xl:gap-10 font-gilroy text-base font-normal items-center'}>
                     {filteredLinks && filteredLinks.map((e, _uid) => (

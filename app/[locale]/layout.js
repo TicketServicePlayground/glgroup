@@ -277,9 +277,9 @@ export const metadata = {
   icons: {
     icon: '/img/logo.svg',
   },
-  metadataBase: new URL(process.env.SITE_URL),
+  metadataBase: new URL(process.env.SITE_URL || 'https://localhost:3000'),
 };
-export const revalidate = 3600;
+export const dynamic = 'force-dynamic';
 export default async function LocalLayout({ children, params}) {
  // console.log();
   unstable_setRequestLocale(params.locale);
@@ -333,7 +333,7 @@ export default async function LocalLayout({ children, params}) {
       whatsappLabel: globalStrapi?.header?.whatsappLabel,
   };
   //console.log(headMenu);
-  const menu = global.data.story?.content.linkMenu[1];
+  const menu = global?.data?.story?.content?.linkMenu?.[1];
 
 
   return (
@@ -357,7 +357,7 @@ export default async function LocalLayout({ children, params}) {
               <Footer links={headMenu} sitename={menu?.siteName} footer={footer}/>
             </footer>
             <ScrollToTop />
-            <CookieAlert data={global.data.story.content.CookieMessage} />
+            <CookieAlert data={global?.data?.story?.content?.CookieMessage} />
             <ForModal locale={locale} />
           </NextIntlClientProvider>
           <Script id={'clarity-script'} strategy={'afterInteractive'}  dangerouslySetInnerHTML={{

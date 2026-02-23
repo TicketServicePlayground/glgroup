@@ -15,7 +15,7 @@ const MobileMenu = ({menu, link, type}) => {
     const { open } = useModalContact();
     const scrolledPastHero = useScrolledPastHero();
 
-    const filteredData = Object.entries(link.links)
+    const filteredData = Object.entries(link?.links || {})
         .filter(([key, value]) => condition(value))
         .reduce((acc, [key, value]) => {
             acc = value;
