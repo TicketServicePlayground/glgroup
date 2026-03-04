@@ -5,7 +5,7 @@ import Post from "@/components/Post/Post";
 import {unstable_setRequestLocale} from "next-intl/server";
 import {notFound} from "next/navigation";
 import Article from "@/components/JSON-LD/Article";
-import {StoryblokComponent} from "@storyblok/react/rsc";
+import DynamicComponent from "@/components/ServerDynamicComponent";
 import OtherArticles from "@/components/OtherArticles/OtherArticles";
 import OurRecomendations from "@/components/OurRecomendations/OurRecomendations";
 export const revalidate = 3600;

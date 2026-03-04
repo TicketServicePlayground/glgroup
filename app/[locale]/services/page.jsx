@@ -1,6 +1,6 @@
 import React from 'react';
 import {fetchData} from "@/lib/api";
-import {StoryblokComponent} from "@storyblok/react/rsc";
+import DynamicComponent from "@/components/ServerDynamicComponent";
 import {useLocale} from "next-intl";
 import {unstable_setRequestLocale} from "next-intl/server";
 
@@ -38,6 +38,6 @@ export default async function Page({params: {locale}}) {
     unstable_setRequestLocale(locale);
     const {data} = await fetchData(`/services/index`, {version: 'draft', language: locale});
     return (
-        <StoryblokComponent blok={data?.story.content} />
+        <DynamicComponent blok={data?.story.content} />
     );
 }

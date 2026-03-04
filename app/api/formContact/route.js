@@ -68,7 +68,7 @@ export async function POST(request) {
 
         };
 
-        const response = await fetch(process.env.API_URL, {
+        const response = await fetch(process.env.BITRIX_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

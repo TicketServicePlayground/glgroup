@@ -3,7 +3,7 @@ import React, {Suspense, useEffect, useState} from 'react';
 import styles from './ContactForm.module.scss'
 import {render} from 'storyblok-rich-text-react-renderer';
 import Link from "next/link";
-import {storyblokEditable} from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {useLocale} from "next-intl";
 import UTMParamsProvider from "@/components/UTMParamsProvider/UTMParamsProvider";

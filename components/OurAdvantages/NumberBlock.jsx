@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './number.module.scss';
 import {render} from 'storyblok-rich-text-react-renderer';
-import {storyblokEditable} from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 
 const NumberBlock = ({item}) => {
     return (

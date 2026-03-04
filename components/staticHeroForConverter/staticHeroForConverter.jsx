@@ -4,7 +4,7 @@ import Image from "next/image";
 import Breadcrumbs from "./Breadcrumbs";
 import clsx from "clsx";
 import {render} from "storyblok-rich-text-react-renderer";
-import {storyblokEditable} from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 
 
 

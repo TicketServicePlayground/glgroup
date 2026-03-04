@@ -3,7 +3,7 @@ import React, {useEffect, useRef} from 'react';
 import styles from './AllCategoryes.module.scss';
 import Link from "next/link";
 import clsx from "clsx";
-import {storyblokEditable} from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 
 
 const AllCategroyes = ({blok, active, locale}) => {

@@ -1,17 +1,22 @@
 import { supabase } from "@/lib/supabaseClient";
-import ExchangeDashboardBank from "./ExchangeDashboardBank";
+import Converter from "./Converter";
 import { getCurrencies } from "@/lib/api";
 import { headers } from "next/headers";
 
-export default async function ExchangeDashboardBankServer({ blok }) {
+export default async function ConverterServer({ blok }) {
     const locale = headers().get("x-next-intl-locale") || "en";
 
-    /* === 1. Дані з backend (exchange_rates_latest_2) === */
-    const { data: ratesData } = await supabase
-        .from("exchange_rates_latest_2")
+    /* === 1. BI latest rates === */
+    const { data: ratesBIData } = await supabase
+        .from("exchange_rates_bi_latest")
         .select("*");
 
-    /* === 2. Нормалізація валют (CNH / RMB → CNY) === */
+    /* === 2. Latest rates === */
+    const { data: ratesData } = await supabase
+        .from("exchange_rates_latest")
+        .select("*");
+
+    /* === 3. Normalize currencies (CNH/RMB → CNY) === */
     const normalizeRates = (rates) =>
         (rates || []).map((rate) => ({
             ...rate,
@@ -21,9 +26,10 @@ export default async function ExchangeDashboardBankServer({ blok }) {
                     : rate.currency,
         }));
 
-    const normalizedRatesData = normalizeRates(ratesData);
+    const normalizedRates = normalizeRates(ratesData);
+    const normalizedRatesBI = normalizeRates(ratesBIData);
 
-    /* === 3. Дані про валюти з API === */
+    /* === 4. Currencies from CMS datasource === */
     const currenciesResponse = await getCurrencies(locale);
     const currenciesData = currenciesResponse?.data?.datasource_entries || [];
 
@@ -31,9 +37,7 @@ export default async function ExchangeDashboardBankServer({ blok }) {
         currenciesData.map((c) => [c.name, c.dimension_value || c.value])
     );
 
-    const currenciesList = currenciesData.map((c) => c.name);
-
-    /* === 4. Дані про банки === */
+    /* === 5. Banks map from blok === */
     const bankList = blok.BankList?.[0]?.banks || [];
     const banksMap = Object.fromEntries(
         bankList.map((b) => [
@@ -47,21 +51,13 @@ export default async function ExchangeDashboardBankServer({ blok }) {
         ])
     );
 
-    /* === 5. Фільтрація по доступних банках === */
-    const filterAvailableBanks = (rates) =>
-        rates.filter((rate) => banksMap[rate.bank]?.available);
-
-    const filteredRatesData = filterAvailableBanks(normalizedRatesData);
-
-    /* === 6. Передаємо все у клієнтський компонент === */
     return (
-        <ExchangeDashboardBank
+        <Converter
             blok={blok}
-            rates={filteredRatesData}
-            currenciesMap={currenciesMap}
-            currenciesList={currenciesList}
+            rates={normalizedRates}
+            ratesBI={normalizedRatesBI}
             banksMap={banksMap}
-            locale={locale}
+            currenciesMap={currenciesMap}
         />
     );
 }

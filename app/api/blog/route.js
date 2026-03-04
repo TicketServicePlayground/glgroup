@@ -1,51 +1,43 @@
-// import {getStoryblokApi, apiPlugin } from "@storyblok/react/rsc";
+const API_URL = process.env.API_URL || 'http://localhost:8081';
+const SPACE = 'glgroup';
 
-
-
-const {
-    StoryblokClient,
-    apiPlugin,
-    getStoryblokApi: getStoryblokApiDefault,
-    storyblokInit
-} = require("@storyblok/react/rsc");
-
-let storyblokApi;
-
-const AppStoryblokInit = () => {
-    storyblokInit({
-        accessToken: process.env.STORYBLOK_ACCESS_TOKEN,
-        use: [apiPlugin],
-    });
-
-    return getStoryblokApiDefault();
-};
-
-export const getStoryblokApi = () => {
-    if (storyblokApi !== undefined) return storyblokApi;
-    return AppStoryblokInit();
-};
-
-
-
-export async function GET(request){
+export async function GET(request) {
     const searchParams = request.nextUrl.searchParams;
     const page = searchParams.get('page');
     const lang = searchParams.get('lang');
+    const locale = lang === 'default' ? 'ru' : (lang || 'en');
 
-    let sbParams = {
-        version: "published",
-        starts_with: 'blog/',
-        page: page,
-        per_page: 9,
-        language: lang,
-        cv:Date.now(),
+    const url = new URL(`${API_URL}/front/cms/pages/${SPACE}/by-prefix`);
+    url.searchParams.set('prefix', 'blog/');
+    url.searchParams.set('locale', locale);
+
+    const res = await fetch(url.toString());
+    if (!res.ok) {
+        return Response.json([], { status: res.status });
     }
+    const pages = await res.json();
 
+    // Convert to Storyblok-compatible story format
+    const stories = pages.map(p => {
+        let content = p.body;
+        if (typeof content === 'string') {
+            try { content = JSON.parse(content); } catch { content = {}; }
+        }
+        return {
+            content,
+            slug: p.slug,
+            name: p.slug,
+            full_slug: p.slug,
+            published_at: p.updatedAt,
+            created_at: p.createdAt,
+        };
+    });
 
+    // Client-side pagination
+    const perPage = 9;
+    const pageNum = parseInt(page) || 1;
+    const start = (pageNum - 1) * perPage;
+    const paginated = stories.slice(start, start + perPage);
 
-    const storyblokApi = getStoryblokApi();
-    let fetch = await storyblokApi.get('cdn/stories/', sbParams);
-
-   return  Response.json(fetch.data.stories);
-
+    return Response.json(paginated);
 }

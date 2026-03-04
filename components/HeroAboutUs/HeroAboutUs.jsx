@@ -5,7 +5,7 @@ import Breadcrumbs from "./Breadcrumbs";
 import clsx from "clsx";
 import {render} from "storyblok-rich-text-react-renderer";
 import Slider from "@/components/HeroAboutUs/Slider";
-import {storyblokEditable} from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 
 
 

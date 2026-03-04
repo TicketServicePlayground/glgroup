@@ -6,33 +6,33 @@ import { headers } from "next/headers";
 export default async function ExchangeDashboardMainServer({ blok }) {
     const locale = headers().get("x-next-intl-locale") || "en";
 
-    const { data } = await supabase
+    /* === 1. Доступні дати === */
+    const { data: datesRaw } = await supabase
         .from("exchange_rates")
         .select("timestamp")
         .gt("buy", 0)
-        .gt("sell", 0)
-        .order("timestamp", { ascending: false });
+        .gt("sell", 0);
 
     const availableDates = [...new Set(
-        data?.map(row => {
-            const d = new Date(row.timestamp);
-            return isNaN(d.getTime()) ? null : d.toISOString().split("T")[0];
-        }).filter(Boolean) || []
+        (datesRaw || [])
+            .map(d => {
+                const date = new Date(d.timestamp);
+                return isNaN(date.getTime()) ? null : date.toISOString().split("T")[0];
+            })
+            .filter(Boolean)
     )].sort((a, b) => b.localeCompare(a));
-    /* === 1. Дані з Supabase (exchange_rates) === */
-    const { data: ratesData, error } = await supabase
-        .from('exchange_rates_latest')
-        .select('*')
-        .order('currency');
-    if (error) console.error("Supabase error:", error);
 
-    /* === 2. Дані з Supabase (exchange_rates_bi) === */
-    const { data: ratesBIData, error: errorBI } = await supabase
+    /* === 2. Latest rates === */
+    const { data: ratesData } = await supabase
+        .from("exchange_rates_latest")
+        .select("*");
+
+    /* === 3. BI latest rates === */
+    const { data: ratesBIData } = await supabase
         .from("exchange_rates_bi_latest")
-        .select("currency, buy, sell");
-    if (errorBI) console.error("Supabase BI error:", errorBI);
+        .select("*");
 
-    /* === 3. Нормалізація валют (CNH / RMB → CNY) === */
+    /* === 4. Нормалізація валют (CNH / RMB → CNY) === */
     const normalizeRates = (rates) =>
         (rates || []).map((rate) => ({
             ...rate,
@@ -101,7 +101,7 @@ export default async function ExchangeDashboardMainServer({ blok }) {
     };
     const normalizedRatesData = normalizeRates(ratesData);
     const normalizedRatesBIData = normalizeRatesBi(ratesBIData);
-    /* === 4. Дані про валюти з API === */
+    /* === 5. Дані про валюти з API === */
     const currenciesResponse = await getCurrencies(locale);
     const currenciesData = currenciesResponse?.data?.datasource_entries || [];
 
@@ -111,7 +111,7 @@ export default async function ExchangeDashboardMainServer({ blok }) {
 
     const currenciesList = currenciesData.map((c) => c.name);
 
-    /* === 5. Дані про банки зі Storyblok === */
+    /* === 6. Дані про банки === */
     const bankList = blok.BankList?.[0]?.banks || [];
     const banksMap = Object.fromEntries(
         bankList.map((b) => [
@@ -125,13 +125,13 @@ export default async function ExchangeDashboardMainServer({ blok }) {
         ])
     );
 
-    /* === 6. Фільтрація по доступних банках === */
+    /* === 7. Фільтрація по доступних банках === */
     const filterAvailableBanks = (rates) =>
         rates.filter((rate) => banksMap[rate.bank]?.available);
 
     const filteredRatesData = filterAvailableBanks(normalizedRatesData);
     const filteredRatesBIData = normalizedRatesBIData;
-    /* === 7. Передаємо все у клієнтський компонент === */
+    /* === 8. Передаємо все у клієнтський компонент === */
     return (
         <ExchangeDashboardMain
             blok={blok}

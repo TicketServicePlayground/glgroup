@@ -2,7 +2,7 @@ import React from 'react';
 import {fetchData} from "@/lib/api";
 import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
 import AuthorPage from "@/components/AutohorPage/AuthorPage";
-import {StoryblokComponent} from "@storyblok/react/rsc";
+import DynamicComponent from "@/components/ServerDynamicComponent";
 import {unstable_setRequestLocale} from "next-intl/server";
 import {console} from "next/dist/compiled/@edge-runtime/primitives";
 
@@ -43,7 +43,7 @@ export default async function Page({params: {locale}}){
 
     return (
         <>
-            <StoryblokComponent blok={data?.story.content}  />
+            <DynamicComponent blok={data?.story.content}  />
         </>
     );
 };

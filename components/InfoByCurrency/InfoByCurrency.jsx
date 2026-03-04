@@ -4,7 +4,7 @@ import React, { useState, useEffect, useMemo, useRef } from "react";
 import styles from "./InfoByCurrency.module.scss";
 import clsx from "clsx";
 import { render } from "storyblok-rich-text-react-renderer";
-import { storyblokEditable } from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 import Image from "next/image";
 import Link from "next/link";
 

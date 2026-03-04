@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './BlockWithArrow.module.scss'
 import Image from "next/image";
 import clsx from "clsx";
-import {storyblokEditable} from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 
 const BlockWithArrow = ({blok}) => {
     return (

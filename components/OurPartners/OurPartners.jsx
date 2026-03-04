@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './OurPartners.module.scss';
 import Slider from './Slider';
-import {storyblokEditable} from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 
 
 const OurPartners = ({blok}) => {

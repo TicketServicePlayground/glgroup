@@ -2,18 +2,15 @@ import { supabase } from "@/lib/supabaseClient";
 import SingleCurrencyTable from "./SingleCurrencyTable";
 import { getCurrencies } from "@/lib/api";
 import { headers } from "next/headers";
-import ExchangeDashboardMain from "../ExchangeDashboardMain/ExchangeDashboardMain";
 
 export default async function SingleCurrencyTableServer({ blok }) {
     const locale = headers().get("x-next-intl-locale") || "en";
 
-    const { data: ratesData, error } = await supabase
+    const { data: ratesData } = await supabase
         .from("exchange_rates_latest")
         .select("*")
-        .eq("currency", blok.idcurrency)  // "USD" як fallback
-        .gt("buy", 0)
-        .gt("sell", 0);
-    if (error) console.error("Supabase error:", error);
+        .eq("currency", blok.idcurrency);
+
     const normalizeRates = (rates) =>
         (rates || []).map((rate) => ({
             ...rate,
@@ -32,7 +29,6 @@ export default async function SingleCurrencyTableServer({ blok }) {
     );
 
     const currenciesList = currenciesData.map((c) => c.name);
-
 
     const bankList = blok.BankList?.[0]?.banks || [];
     const banksMap = Object.fromEntries(

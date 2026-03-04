@@ -1,13 +1,13 @@
 import React from 'react';
 import styles from './Post.module.scss';
 import Link from "next/link";
-import {getStoryblokApi, StoryblokComponent} from "@storyblok/react/rsc";
+import DynamicComponent from "@/components/ServerDynamicComponent";
 import Image from "next/image";
 import Share from "@/components/Share/Share";
 import ContactForm from "@/components/ContactForm/ContactForm";
 import {fetchData} from "@/lib/api";
 import OtherArticles from "@/components/OtherArticles/OtherArticles";
-import {storyblokEditable} from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 import {useLocale} from "next-intl";
 import {findAnchors} from "@/lib/findAnchors";
 import textStyles from '@/components/UI/UI.module.scss';
@@ -15,38 +15,26 @@ import clsx from "clsx";
 import OurRecomendations from "@/components/OurRecomendations/OurRecomendations";
 
 export async function getData(title, locale, category, showcase) {
-    let sbParams = !showcase ? {
+    const prefix = !showcase ? 'blog/' : 'showcase/';
+    const sbParams = {
         version: "published",
-        starts_with: 'blog/',
+        starts_with: prefix,
         language: locale,
         page: 1,
         per_page: 3,
-        filter_query:{
-            title:{
+        filter_query: {
+            title: {
                 not_in: title
             },
-            Category: {
-                in: '1'
-            }
+            ...((!showcase) && {
+                Category: {
+                    in: '1'
+                }
+            })
         }
-    } : {
-        version: "published",
-        starts_with: 'showcase/',
-        language: locale,
-        page: 1,
-        per_page: 3,
-        filter_query:{
-            title:{
-                not_in: title,
-            },
+    };
 
-        }
-    }
-
-    const storyblokApi = getStoryblokApi();
-    let fetch = await storyblokApi.get('cdn/stories/', sbParams);
-
-    return  fetch;
+    return await fetchData('', sbParams);
 }
 
 export default async function Post ({blok, showcase}) {
@@ -142,7 +130,7 @@ export default async function Post ({blok, showcase}) {
                             </div>
                         )}
                         {blok.content.textBlocks && blok.content.textBlocks.map((e, _uid) => (
-                            <StoryblokComponent blok={e} key={_uid}/>
+                            <DynamicComponent blok={e} key={_uid}/>
                         ))}
                     </div>
                     <Share/>

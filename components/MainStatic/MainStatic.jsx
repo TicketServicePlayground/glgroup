@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Breadcrumbs from "@/components/MainStatic/Breadcrumbs";
 import {getPathname} from "@nimpl/getters/get-pathname";
-import {storyblokEditable} from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 
 const MainStatic = ({blok, breadcrumbs}) => {
     return (

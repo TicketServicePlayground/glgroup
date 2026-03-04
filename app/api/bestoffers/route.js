@@ -16,7 +16,7 @@ export async function GET(req) {
         .order('timestamp', { ascending: false });
 
     if (error || !data) {
-        console.error('❌ Supabase fetch error:', error?.message);
+        console.error('Supabase fetch error:', error?.message);
         return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 });
     }
 

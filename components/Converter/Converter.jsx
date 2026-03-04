@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useRef, useEffect } from "react";
-import { storyblokEditable } from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 import clsx from "clsx";
 import styles from "./converter.module.scss";
 import { render } from "storyblok-rich-text-react-renderer";

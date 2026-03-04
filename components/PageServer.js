@@ -1,16 +1,13 @@
 import React from 'react';
-import DynamicComponent from "@/components/DynamicComponent";
+import ServerDynamicComponent from "@/components/ServerDynamicComponent";
 import {storyblokEditable} from "@/lib/storyblokCompat";
 
-const Page = ({blok}) => {
+export default function PageServer({blok}) {
     return (
         <main {...storyblokEditable(blok)}>
             {blok.body.map((nestedBlok) => (
-                <DynamicComponent blok={nestedBlok} key={nestedBlok._uid} />
+                <ServerDynamicComponent blok={nestedBlok} key={nestedBlok._uid} />
             ))}
         </main>
     );
-};
-
-
-export default Page;
+}

@@ -3,7 +3,7 @@ import React from "react";
 import styles from "./OrderConsultation.module.scss";
 import clsx from "clsx";
 import { render } from "storyblok-rich-text-react-renderer";
-import { storyblokEditable } from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 import Image from "next/image";
 import { fetchData } from "@/lib/api";
 import { headers } from "next/headers";

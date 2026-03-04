@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./ServicesList.module.scss";
 import clsx from "clsx";
 import { render } from "storyblok-rich-text-react-renderer";
-import { storyblokEditable } from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 import Image from "next/image";
 import Link from "next/link";
 

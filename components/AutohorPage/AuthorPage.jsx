@@ -3,7 +3,7 @@ import styles from './AuthorPage.module.scss'
 import {render} from "storyblok-rich-text-react-renderer";
 import Link from "next/link";
 import Image from "next/image";
-import {storyblokEditable} from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 
 const AuthorPage = ({blok}) => {
     return (

@@ -6,7 +6,7 @@ import Breadcrumbs from "./Breadcrumbs";
 import styles from "./SingleCurrencyTable.module.scss";
 import clsx from "clsx";
 import { render } from "storyblok-rich-text-react-renderer";
-import { storyblokEditable } from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 import Link from "next/link";
 
 function formatNumber(value) {

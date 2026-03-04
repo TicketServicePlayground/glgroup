@@ -5,7 +5,7 @@ import Image from "next/image";
 import styles from "./bestOfferForEachBank.module.scss";
 import clsx from "clsx";
 import { render } from "storyblok-rich-text-react-renderer";
-import { storyblokEditable } from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 import DatePicker from "react-datepicker";
 import ru from "date-fns/locale/ru";
 import id from "date-fns/locale/id";

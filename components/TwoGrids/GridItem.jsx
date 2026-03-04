@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from "clsx";
 import styles from "./GridItem.module.scss";
-import {storyblokEditable} from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 import Image from "next/image";
 import {render} from "storyblok-rich-text-react-renderer";
 

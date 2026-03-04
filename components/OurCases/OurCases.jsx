@@ -7,7 +7,7 @@ import clsx from "clsx";
 import {render} from "storyblok-rich-text-react-renderer";
 import 'swiper/css';
 import Link from "next/link";
-import {storyblokEditable} from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 
 const OurCases = ({blok}) => {
     const [activeTab, setActiveTab] = useState(0);

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import {getStoryblokApi, StoryblokComponent} from "@storyblok/react/rsc";
+import DynamicComponent from "@/components/ServerDynamicComponent";
 import {fetchData} from "@/lib/api";
 import {unstable_setRequestLocale} from "next-intl/server";
 import {useLocale} from "next-intl";
@@ -43,7 +43,7 @@ export default async function Home({params}) {
     return (
         <>
             <Organization />
-            <StoryblokComponent blok={data?.story.content}  />
+            <DynamicComponent blok={data?.story.content}  />
         </>
 
     );

@@ -1,7 +1,7 @@
 import React from 'react';
 import {fetchData} from "@/lib/api";
-import {StoryblokComponent} from "@storyblok/react/rsc";
-import {storyblokEditable} from "@storyblok/react";
+import DynamicComponent from "@/components/ServerDynamicComponent";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 import Breadcrumbs from "/components/Breadcrumbs/Breadcrumbs";
 import {notFound} from "next/navigation";
 import {unstable_setRequestLocale} from "next-intl/server";
@@ -58,7 +58,7 @@ export default async function Page({params, params: {locale}}) {
     return (
         <>
             <Breadcrumbs links={data?.story.content.breadcrumbs}/>
-            <StoryblokComponent blok={data?.story.content}  />
+            <DynamicComponent blok={data?.story.content}  />
         </>
 
     );

@@ -1,5 +1,5 @@
 import React from 'react';
-import {storyblokEditable} from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 import styles from "./OurRecomendations.module.scss";
 import Slider from "./Slider";
 import clsx from "clsx";

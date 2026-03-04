@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './number.module.scss'
 import Image from "next/image";
-import {storyblokEditable} from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 
 
 const BlockItem = ({blok}) => {

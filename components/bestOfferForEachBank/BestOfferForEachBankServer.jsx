@@ -6,25 +6,19 @@ import { headers } from "next/headers";
 export default async function BestOfferForEachBankServer({ blok }) {
     const locale = headers().get("x-next-intl-locale") || "en";
 
-    const { data: ratesData, error: ratesError } = await supabase
+    const { data: ratesData } = await supabase
         .from("exchange_rates")
         .select("*")
         .gt("buy", 0)
-        .gt("sell", 0)
-        .order("timestamp", { ascending: false });
+        .gt("sell", 0);
 
-    if (ratesError || !ratesData) {
-        console.error("❌ Supabase fetch error (exchange_rates):", ratesError?.message);
-        return null;
-    }
-
-    const { data: biData, error: biError } = await supabase
+    const { data: biData } = await supabase
         .from("exchange_rates_bi")
-        .select("*")
-        .order("timestamp", { ascending: false });
+        .select("*");
 
-    if (biError || !biData) {
-        console.error("❌ Supabase fetch error (exchange_rates_bi):", biError?.message);
+    if (!ratesData) {
+        console.error("No exchange rates data");
+        return null;
     }
 
     const latestByBank = {};

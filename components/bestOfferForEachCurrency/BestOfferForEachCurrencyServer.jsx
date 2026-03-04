@@ -5,22 +5,17 @@ import { headers } from "next/headers";
 
 export default async function BestOfferForEachCurrencyServer({ blok }) {
     const locale = headers().get("x-next-intl-locale") || "en";
-    // --- Дані з Supabase ---
-    const date = new Date().toISOString().split("T")[0];
-    const dayStart = `${date}T00:00:00`;
-    const dayEnd = `${date}T23:59:59`;
 
-    const { data, error } = await supabase
-        .from("exchange_rates")
+    const today = new Date().toISOString().split("T")[0];
+    const { data } = await supabase
+        .from("exchange_rates_duplicate")
         .select("*")
-        .gt("buy", 0)
-        .gt("sell", 0)
-        .gte("timestamp", dayStart)
-        .lte("timestamp", dayEnd)
+        .gte("timestamp", `${today}T00:00:00`)
+        .lte("timestamp", `${today}T23:59:59`)
         .order("timestamp", { ascending: false });
 
-    if (error || !data) {
-        console.error("❌ Supabase fetch error:", error?.message);
+    if (!data || data.length === 0) {
+        console.error("No exchange rates for today");
         return null;
     }
 
@@ -53,16 +48,13 @@ export default async function BestOfferForEachCurrencyServer({ blok }) {
         })
         .filter(Boolean);
 
-    // --- Дані з Storyblok Data Source ---
     const currenciesResponse = await getCurrencies(locale);
     const currenciesData = currenciesResponse?.data?.datasource_entries || [];
 
-    // --- Створюємо map для швидкого доступу до назви валюти ---
     const currenciesMap = Object.fromEntries(
         currenciesData.map((c) => [c.name, c.dimension_value || c.value])
     );
 
-    // --- Додаємо поле name та сортуємо за порядком Storyblok ---
     const ratesWithName = currenciesData
         .map((c) => {
             const rate = rates.find((r) => r.currency === c.name);

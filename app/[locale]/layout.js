@@ -1,110 +1,21 @@
-import { Inter, Roboto } from "next/font/google";
+import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import clsx from "clsx";
-import StoryblokProvider from "@/components/StoryblokProvider/StoryblokProvider";
 import {GoogleTagManager, GoogleAnalytics}  from '@next/third-parties/google'
 
-import hero from '/components/Hero/Hero';
-import slider from '/components/Slider/Slider';
-import twoBlock from "/components/TwoBlock/TwoBlock";
-import StoryblokBridgeLoader from "@storyblok/react/bridge-loader";
-import Page from '/components/Page';
 import {fetchData} from "@/lib/api";
-import Header from "/components/header/header";
-import Menu from "/components/menu/menu";
-import title from "/components/UI/title";
-import ImageBlock from "/components/UI/image";
-import Text from "/components/UI/text";
-import Button from "/components/UI/button";
-import Grid from "/components/Grid/Grid";
-import GridItem from "/components/Grid/GridItem";
-import SectionNumber from "/components/SectionNumber/SectionNumber";
-import BlockWithArrow from "/components/BlockWithArrow/BlockWithArrow";
 import Footer from "/components/Footer/Footer";
-import OurPartners from "/components/OurPartners/OurPartners";
-import OurRecomendations from "/components/OurRecomendations/OurRecomendations";
-import ContactForm from "/components/ContactForm/ContactForm";
-import OurCases from "/components/OurCases/OurCases";
-import MobileMenu from "/components/MobileMenu/MobileMenu";
-import {getPathname} from "@nimpl/getters/get-pathname";
-import Section from "/components/Section/Section";
 import NavMenu from "@/components/NavMenu/NavMenu";
-import TwoGrids from "@/components/TwoGrids/twoGrids";
-import Steps from "@/components/Steps/Steps";
-import ContactMap from "@/components/ContactMap/ContactMap";
-import GridWithImage from "@/components/GridWithImage/GridWithImage";
-import GridImg from "@/components/GridWithImage/GridImg";
-import Contact from "@/components/Contact/Contact";
-import FormContact from "@/components/FormContact/FormContact";
 import CookieAlert from "@/components/CookieAlert/CookieAlert";
-import HeroAboutUs from "@/components/HeroAboutUs/HeroAboutUs";
-import OurAdvantages from "@/components/OurAdvantages/OurAdvantages";
-import History from "@/components/History/History";
 import {NextIntlClientProvider} from "next-intl";
-import {getMessages, unstable_setRequestLocale} from 'next-intl/server';
+import {unstable_setRequestLocale} from 'next-intl/server';
 import Script from "next/script";
 import ScrollToTop from "@/components/ScrollToTop/ScrollToTop";
 import UTMParamsProvider from "@/components/UTMParamsProvider/UTMParamsProvider";
 import React, {Suspense} from "react";
-import {ModalSec} from "@/components/Modal/ModalSec";
 import ForModal from "@/components/ContactForm/forModal";
-import ButtonCTA from "@/components/ButtonCTA/ButtonCTA";
 import {fetchStrapi} from "@/lib/newApi";
 import {globalPopulate} from "@/lib/strapi/populates/global";
-
-
-
-const {
-  StoryblokClient,
-  apiPlugin,
-  getStoryblokApi: getStoryblokApiDefault,
-  storyblokInit
-} = require("@storyblok/react/rsc");
-
-let storyblokApi;
-
-const AppStoryblokInit = () => {
-  storyblokInit({
-    accessToken: process.env.STORYBLOK_ACCESS_TOKEN,
-    use: [apiPlugin],
-    components:{
-      page: Page,
-      hero: hero,
-      sliderMain: slider,
-      twoBlock: twoBlock,
-      title: title,
-      imageBlock: ImageBlock,
-      textBlock: Text,
-      buttonBlock: Button,
-      grid: Grid,
-      gridItem: GridItem,
-      sectionNumber: SectionNumber,
-      blockWithArrow: BlockWithArrow,
-      ourPartners: OurPartners,
-      ourRecomendations: OurRecomendations,
-      contactForm: ContactForm,
-      ourCases: OurCases,
-      section: Section,
-      twoGrids: TwoGrids,
-      steps: Steps,
-      contactMap: ContactMap,
-      gridWithImage: GridWithImage,
-      gridImg: GridImg,
-      contact: Contact,
-      fromContact: FormContact,
-      HeroAboutUs: HeroAboutUs,
-      ourAdvantages: OurAdvantages,
-      history: History,
-      buttonCTA: ButtonCTA,
-    },
-  });
-
-  return getStoryblokApiDefault();
-};
-export const getStoryblokApi = () => {
-  if (storyblokApi !== undefined) return storyblokApi;
-  return AppStoryblokInit();
-};
 
 const inter = Inter({ subsets: ["latin"], weight: ["100", "300", "400", "500", "700", "900"] });
 const locales = ['ru', 'en'];
@@ -337,7 +248,6 @@ export default async function LocalLayout({ children, params}) {
 
 
   return (
-      <StoryblokProvider>
         <html lang={locale}>
           <body className={clsx(inter.className, Gilroy.variable, Formular.variable)}>
           <script
@@ -370,8 +280,6 @@ export default async function LocalLayout({ children, params}) {
             `
           }} />
           </body>
-          <StoryblokBridgeLoader options={{resolveRelations: ["article.author"] }} />
         </html>
-      </StoryblokProvider>
   );
 }

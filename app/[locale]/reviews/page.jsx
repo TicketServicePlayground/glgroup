@@ -2,7 +2,7 @@ import {unstable_setRequestLocale} from "next-intl/server";
 import {fetchData} from "@/lib/api";
 import Organization from "@/components/JSON-LD/Organization";
 import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
-import {StoryblokComponent} from "@storyblok/react/rsc";
+import DynamicComponent from "@/components/ServerDynamicComponent";
 import React from "react";
 
 export default async function Page({params: {locale}}) {
@@ -11,7 +11,7 @@ export default async function Page({params: {locale}}) {
     return (
         <main className={"min-h-[80vh]"}>
             <Breadcrumbs links={data?.story.content.breadcrumbs}/>
-            <StoryblokComponent blok={data?.story.content} locale={locale}  />
+            <DynamicComponent blok={data?.story.content} locale={locale}  />
         </main>
 
     );

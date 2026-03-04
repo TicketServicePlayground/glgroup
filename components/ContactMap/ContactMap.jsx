@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './ContactMap.module.scss';
 import Image from "next/image";
 import Link from "next/link";
-import {storyblokEditable} from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 
 const ContactMap = ({blok}) => {
     return (

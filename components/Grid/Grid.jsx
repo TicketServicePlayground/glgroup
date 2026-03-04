@@ -1,9 +1,9 @@
 'use client';
 import React, {useEffect} from 'react';
 import styles from "./Grid.module.scss";
-import {StoryblokComponent} from "@storyblok/react/rsc";
+import DynamicComponent from "@/components/DynamicComponent";
 import clsx from "clsx";
-import {storyblokEditable} from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 
 
 const Grid = ({blok}) => {
@@ -48,7 +48,7 @@ const Grid = ({blok}) => {
                     (typeof blok.columns[0].arrow !== 'undefined' && blok.columns[0].arrow !== null) && styles.withArrow,
                      blok.mobileScroll && styles.mobileScroll )} id={blok.mobileScroll ? ("scrollBlock") : ('grid')}>
                     {blok.columns && blok.columns.map((e, _uid)=>(
-                        <StoryblokComponent blok={e} key={_uid}  />
+                        <DynamicComponent blok={e} key={_uid}  />
                     ))}
                 </div>
             </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './GridWithImage.module.scss'
 import Link from "next/link";
 import Image from "next/image";
-import {storyblokEditable} from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 
 const GridImg = ({blok}) => {
     return (

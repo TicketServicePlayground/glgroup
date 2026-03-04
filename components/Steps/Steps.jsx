@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './Steps.module.scss'
 import Image from "next/image";
-import {storyblokEditable} from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 
 const Steps = ({blok}) => {
     return (

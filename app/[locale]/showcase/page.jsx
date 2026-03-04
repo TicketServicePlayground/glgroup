@@ -1,7 +1,7 @@
 import React from 'react';
-import {storyblokEditable} from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
-import {getStoryblokApi, StoryblokComponent} from "@storyblok/react/rsc";
+import DynamicComponent from "@/components/ServerDynamicComponent";
 import PosePreview from "@/components/PostPreview/PosePreview";
 import LazyLoadBlog from "@/components/LazyLoadBlog/LazyLoadBlog";
 import {getCategory} from "@/lib/category";
@@ -159,7 +159,7 @@ export default async function Page({params: {locale}}) {
                     {/*<LazyLoadBlog count={fetch.total} locale={locale}/>*/}
                 </div>
             </section>
-            <StoryblokComponent blok={data?.story.content}/>
+            <DynamicComponent blok={data?.story.content}/>
         </>
 
 

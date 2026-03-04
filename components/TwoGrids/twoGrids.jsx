@@ -1,10 +1,10 @@
 import React from 'react';
 import styles from './twoGrids.module.scss';
-import {StoryblokComponent} from "@storyblok/react/rsc";
+import DynamicComponent from "@/components/DynamicComponent";
 import GridItem from "./GridItem";
 import Image from "next/image";
 import Item from "@/components/TwoGrids/Item";
-import {storyblokEditable} from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 
 const TwoGrids = ({blok}) => {
     return (
@@ -48,7 +48,7 @@ const TwoGrids = ({blok}) => {
                      </div>
                     <div className={styles.leftBlock}>
                         {blok?.leftSide && blok.leftSide.map((e, _uid)=>(
-                            <StoryblokComponent blok={e}  key={_uid}/>
+                            <DynamicComponent blok={e}  key={_uid}/>
                         ))}
                     </div>
                 </div>

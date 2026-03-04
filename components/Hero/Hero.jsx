@@ -7,7 +7,7 @@ import clsx from "clsx";
 import {Swiper} from "swiper";
 import {fetchData} from "@/lib/api";
 import MainStatic from "@/components/MainStatic/MainStatic";
-import {storyblokEditable} from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 
 const  Hero = ({blok}) => {
     const heroBlock = blok.heroBlock[0];

@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './GridWithImage.module.scss'
-import {StoryblokComponent} from "@storyblok/react/rsc";
-import {storyblokEditable} from "@storyblok/react";
+import DynamicComponent from "@/components/DynamicComponent";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 const GridWithImage = ({blok}) => {
     return (
         <section className={styles.gridWithImage} {...storyblokEditable(blok)}>
@@ -9,7 +9,7 @@ const GridWithImage = ({blok}) => {
                 <h2>{blok.title}</h2>
                 <div className={styles.grid}>
                     {blok?.blocks && blok.blocks.map((e, _uid)=>(
-                        <StoryblokComponent blok={e} key={_uid}/>
+                        <DynamicComponent blok={e} key={_uid}/>
                     ))}
                 </div>
             </div>

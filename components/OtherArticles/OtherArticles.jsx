@@ -1,6 +1,5 @@
 "use client";
 import React, {useRef} from 'react';
-import {getStoryblokApi} from "@storyblok/react/rsc";
 import {Swiper, SwiperSlide, useSwiper} from 'swiper/react';
 import { Pagination, Navigation } from 'swiper/modules';
 import 'swiper/css';
@@ -8,7 +7,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import PosePreview from "@/components/PostPreview/PosePreview";
 import styles from "./OtherArticles.module.scss";
-import {storyblokEditable} from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 import {useLocale} from "next-intl";
 import clsx from "clsx";
 

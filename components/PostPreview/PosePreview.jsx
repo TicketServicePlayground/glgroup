@@ -4,7 +4,7 @@ import styles from './PostPreview.module.scss';
 import Image from "next/image";
 import Link from "next/link";
 import clsx from "clsx";
-import {storyblokEditable} from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 
 const PosePreview = ({blok, other, locale}) => {
     const date = new Date(blok.published_at);

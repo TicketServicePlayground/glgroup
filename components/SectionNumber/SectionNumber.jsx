@@ -1,5 +1,5 @@
 import React from 'react';
-import {storyblokEditable} from "@storyblok/react";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 import styles from "./number.module.scss";
 import clsx from "clsx";
 import NumberBlock from "/components/SectionNumber/NumberBlock";

@@ -1,7 +1,7 @@
 import React from 'react';
 import {fetchData} from "@/lib/api";
-import {StoryblokComponent} from "@storyblok/react/rsc";
-import {storyblokEditable} from "@storyblok/react";
+import DynamicComponent from "@/components/ServerDynamicComponent";
+import {storyblokEditable} from "@/lib/storyblokCompat";
 import Breadcrumbs from "/components/Breadcrumbs/Breadcrumbs";
 import {unstable_setRequestLocale} from "next-intl/server";
 import Organization from "@/components/JSON-LD/Organization";
@@ -41,7 +41,7 @@ export default async function Page({params: {locale}}) {
     return (
         <>
             <Organization />
-            <StoryblokComponent blok={data?.story.content} />
+            <DynamicComponent blok={data?.story.content} />
         </>
 
     );
