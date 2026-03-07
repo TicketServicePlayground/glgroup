@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import Image from "next/image";
 import Breadcrumbs from "./Breadcrumbs";
 import styles from "./SingleCurrencyTable.module.scss";
@@ -67,8 +67,27 @@ const SingleCurrencyTable = ({
         setSelectedDate(lastAvailableDate);
     }, [lastAvailableDate]);
 
-    const [sortField, setSortField] = useState(null);
-    const [sortAsc, setSortAsc] = useState(true);
+    const [sortField, setSortField] = useState('buy');
+    const [sortAsc, setSortAsc] = useState(false);
+    const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
+    const sortDropdownRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (sortDropdownRef.current && !sortDropdownRef.current.contains(e.target)) {
+                setSortDropdownOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const sortLabels = {
+        ru: { buy: 'По покупке', sell: 'По продаже', desc: 'По убыванию', asc: 'По возрастанию' },
+        en: { buy: 'By buy rate', sell: 'By sell rate', desc: 'Descending', asc: 'Ascending' },
+        id: { buy: 'Beli', sell: 'Jual', desc: 'Menurun', asc: 'Menaik' },
+    };
+    const lbl = sortLabels[locale] || sortLabels.en;
 
     const selectedDateString = selectedDate.toISOString().split("T")[0];
 
@@ -97,32 +116,11 @@ const SingleCurrencyTable = ({
     const bestBuyEntry = latestByBank.find((r) => r.buy === bestBuyRate);
     const bestSellEntry = latestByBank.find((r) => r.sell === bestSellRate);
 
-    const sortedRates = [...latestByBank].sort((a, b) => {
-        if (!sortField) return 0;
-        return sortAsc ? a[sortField] - b[sortField] : b[sortField] - a[sortField];
-    });
-
     const visibleData = useMemo(() => {
-        const data = [...sortedRates];
-        const result = [];
-
-        if (bestBuyEntry) {
-            const index = data.findIndex(r => r.bank === bestBuyEntry.bank);
-            if (index !== -1) {
-                result.push(data.splice(index, 1)[0]);
-            }
-        }
-
-        if (bestSellEntry && bestSellEntry.bank !== bestBuyEntry?.bank) {
-            const index = data.findIndex(r => r.bank === bestSellEntry.bank);
-            if (index !== -1) {
-                result.push(data.splice(index, 1)[0]);
-            }
-        }
-
-        result.push(...data);
-        return result;
-    }, [sortedRates, bestBuyEntry, bestSellEntry]);
+        return [...latestByBank].sort((a, b) =>
+            sortAsc ? a[sortField] - b[sortField] : b[sortField] - a[sortField]
+        );
+    }, [latestByBank, sortField, sortAsc]);
 
     const handleSort = (field) => {
         if (sortField === field) {
@@ -152,64 +150,73 @@ const SingleCurrencyTable = ({
                 </div>
                 <h1>{blok.title}</h1>
                 <div className={styles.description}>{blok.description}</div>
+                {/* Sort dropdown */}
+                <div className={styles.sortControl} ref={sortDropdownRef}>
+                    <button
+                        type="button"
+                        className={styles.sortButton}
+                        onClick={() => setSortDropdownOpen(o => !o)}
+                    >
+                        <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
+                            <path d="M1 1h16M1 7h10M1 13h6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+                        </svg>
+                        <span>{sortField ? lbl[sortField] : lbl.buy}</span>
+                        <svg width="10" height="14" viewBox="0 0 10 14" fill="none">
+                            <path d="M5 1v12M1 4l4-3 4 3M1 10l4 3 4-3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                    </button>
+
+                    {sortDropdownOpen && (
+                        <div className={styles.sortDropdown}>
+                            <div className={styles.sortGroup}>
+                                {['buy', 'sell'].map(field => (
+                                    <button
+                                        key={field}
+                                        type="button"
+                                        className={styles.sortOption}
+                                        onClick={() => { setSortField(field); setSortDropdownOpen(false); }}
+                                    >
+                                        <span>{lbl[field]}</span>
+                                        {sortField === field && (
+                                            <span className={styles.sortCheck}>
+                                                <svg width="12" height="9" viewBox="0 0 12 9" fill="none">
+                                                    <path d="M1 4l3.5 3.5L11 1" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                                                </svg>
+                                            </span>
+                                        )}
+                                    </button>
+                                ))}
+                            </div>
+                            <div className={styles.sortDivider}/>
+                            <div className={styles.sortGroup}>
+                                {[false, true].map(asc => (
+                                    <button
+                                        key={String(asc)}
+                                        type="button"
+                                        className={styles.sortOption}
+                                        onClick={() => { setSortAsc(asc); setSortDropdownOpen(false); }}
+                                    >
+                                        <span>{asc ? lbl.asc : lbl.desc}</span>
+                                        {sortAsc === asc && (
+                                            <span className={styles.sortCheck}>
+                                                <svg width="12" height="9" viewBox="0 0 12 9" fill="none">
+                                                    <path d="M1 4l3.5 3.5L11 1" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                                                </svg>
+                                            </span>
+                                        )}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
+
                 <div className={styles.tableWrapper}>
                     <div className={styles.table}>
                         <div className={clsx(styles.row, styles.header)}>
                             <div>{render(blok.bank?.[locale] || blok.bank)}</div>
-
-                            <div className={styles.sortable} onClick={() => handleSort("buy")}>
-                                {render(blok.buy?.[locale] || blok.buy)}
-                                <span className={styles.sortIcons}>
-                                    {sortField === "buy" ? (
-                                        sortAsc ? (
-                                            <img
-                                                src="/img/icons/sortarrowup.svg"
-                                                alt="Sort ascending"
-                                                className={styles.sortArrow}
-                                            />
-                                        ) : (
-                                            <img
-                                                src="/img/icons/sortarrowdown.svg"
-                                                alt="Sort descending"
-                                                className={styles.sortArrow}
-                                            />
-                                        )
-                                    ) : (
-                                        <img
-                                            src="/img/icons/sortarrow2.svg"
-                                            alt="Unsorted"
-                                            className={styles.sortArrow}
-                                        />
-                                    )}
-                                </span>
-                            </div>
-
-                            <div className={styles.sortable} onClick={() => handleSort("sell")}>
-                                {render(blok.sell?.[locale] || blok.sell)}
-                                <span className={styles.sortIcons}>
-                                    {sortField === "sell" ? (
-                                        sortAsc ? (
-                                            <img
-                                                src="/img/icons/sortarrowup.svg"
-                                                alt="Sort ascending"
-                                                className={styles.sortArrow}
-                                            />
-                                        ) : (
-                                            <img
-                                                src="/img/icons/sortarrowdown.svg"
-                                                alt="Sort descending"
-                                                className={styles.sortArrow}
-                                            />
-                                        )
-                                    ) : (
-                                        <img
-                                            src="/img/icons/sortarrow2.svg"
-                                            alt="Unsorted"
-                                            className={styles.sortArrow}
-                                        />
-                                    )}
-                                </span>
-                            </div>
+                            <div>{render(blok.buy?.[locale] || blok.buy)}</div>
+                            <div>{render(blok.sell?.[locale] || blok.sell)}</div>
                         </div>
 
                         {visibleData.length > 0 ? (

@@ -478,11 +478,84 @@
     font-weight: 600;
     font-size: 20px;
   }
-  .sortable {
-    display: flex;
-    gap: 10px;
+  .sortControl {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 16px;
+  }
+
+  .sortButton {
+    display: inline-flex;
     align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: #fff;
+    border: 1px solid #DADCE0;
+    border-radius: 100px;
+    font-family: var(--font-gilroy);
+    font-size: 15px;
+    font-weight: 600;
+    color: #212121;
     cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    &:hover {
+      border-color: #3B604E;
+      box-shadow: 0 2px 8px rgba(59, 96, 78, 0.12);
+    }
+  }
+
+  .sortDropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    z-index: 50;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+    min-width: 220px;
+    overflow: hidden;
+    padding: 6px 0;
+  }
+
+  .sortGroup {
+    padding: 4px 0;
+  }
+
+  .sortDivider {
+    height: 1px;
+    background: #E8EAED;
+    margin: 2px 0;
+  }
+
+  .sortOption {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 13px 18px;
+    background: none;
+    border: none;
+    font-family: var(--font-gilroy);
+    font-size: 16px;
+    font-weight: 500;
+    color: #212121;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.1s;
+    &:hover {
+      background: #F5F7F6;
+    }
+  }
+
+  .sortCheck {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #4B89DC;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
   }
 
   .buy_mobile, .sell_mobile {
