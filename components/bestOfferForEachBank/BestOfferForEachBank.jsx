@@ -218,8 +218,8 @@ const BestOfferForEachBank = ({
         }, {})
     );
 
-    const bestBuyRate = latestByBank.length ? Math.min(...latestByBank.map((r) => r.buy)) : 0;
-    const bestSellRate = latestByBank.length ? Math.max(...latestByBank.map((r) => r.sell)) : 0;
+    const bestBuyRate = latestByBank.length ? Math.max(...latestByBank.map((r) => r.buy)) : 0;
+    const bestSellRate = latestByBank.length ? Math.min(...latestByBank.map((r) => r.sell)) : 0;
 
     const bestBankBuyEntry = latestByBank.find((r) => r.buy === bestBuyRate);
     const bestBankSellEntry = latestByBank.find((r) => r.sell === bestSellRate);

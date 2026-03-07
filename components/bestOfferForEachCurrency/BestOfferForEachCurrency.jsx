@@ -37,11 +37,11 @@ function processRates(initialRates, currenciesMap) {
             if (!validRates.length) return null;
 
             const bestBuy = validRates.reduce(
-                (min, r) => (r.buy < min.buy ? r : min),
+                (max, r) => (r.buy > max.buy ? r : max),
                 validRates[0]
             );
             const bestSell = validRates.reduce(
-                (max, r) => (r.sell > max.sell ? r : max),
+                (min, r) => (r.sell < min.sell ? r : min),
                 validRates[0]
             );
 

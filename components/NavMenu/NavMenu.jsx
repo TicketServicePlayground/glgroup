@@ -24,6 +24,7 @@ export default function NavMenu ({headMenu, menu, contact}) {
         "authors",
         "showcase",
         "reviews",
+        "preview",
     ]
     const checkType = (path) => {
         const parts = path.split('/');
@@ -83,8 +84,6 @@ export default function NavMenu ({headMenu, menu, contact}) {
     useEffect(()=>{
         setFixed(fix)
     }, [offset])
-
-    if (pathname.includes('/preview/')) return null;
 
     return (
         <header className={clsx(!white ? `w-full z-20 ${styles.blackMenu}` : `w-full mb-5 lg:mb-12 ${styles.whiteMenu}`, fixed ? styles.fixed : '')}>

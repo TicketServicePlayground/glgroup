@@ -77,12 +77,13 @@ export async function getPosts(params, locale){
 
 export default async function Page ({params, params: {locale}}){
     unstable_setRequestLocale(locale);
-    const fetch = await getPosts(params.slug, locale);
-    if(fetch.data.stories.length === 0){
+    const category = await getCategory(locale);
+    const validCategory = category?.data?.datasource_entries?.find(e => e.value === params.slug);
+    if (!validCategory) {
         notFound();
     }
-    const posts = fetch.data.stories;
-    const category = await getCategory(locale);
+    const fetch = await getPosts(params.slug, locale);
+    const posts = fetch?.data?.stories ?? [];
 
     const breadcrumbs = [
         {
@@ -139,7 +140,7 @@ export default async function Page ({params, params: {locale}}){
                             <PosePreview blok={e} key={_uid} locale={locale}/>
                         ))}
                     </div>
-                    <LazyLoadBlog count={fetch.headers.total} locale={locale}/>
+                    <LazyLoadBlog count={fetch?.total ?? posts.length} locale={locale}/>
                 </div>
             </section>
         </>

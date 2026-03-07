@@ -144,7 +144,7 @@ export default async function Page ({params: {locale}}){
                             <PosePreview blok={e} key={_uid} locale={locale}/>
                         ))}
                     </div>
-                    <LazyLoadBlog count={fetch.total} locale={locale}/>
+                    <LazyLoadBlog count={fetch?.total ?? posts.length} locale={locale}/>
                 </div>
             </section>
             <DynamicComponent blok={data?.story.content} />

@@ -14,8 +14,6 @@ import ScrollToTop from "@/components/ScrollToTop/ScrollToTop";
 import UTMParamsProvider from "@/components/UTMParamsProvider/UTMParamsProvider";
 import React, {Suspense} from "react";
 import ForModal from "@/components/ContactForm/forModal";
-import {fetchStrapi} from "@/lib/newApi";
-import {globalPopulate} from "@/lib/strapi/populates/global";
 
 const inter = Inter({ subsets: ["latin"], weight: ["100", "300", "400", "500", "700", "900"] });
 const locales = ['ru', 'en'];
@@ -194,57 +192,70 @@ export const dynamic = 'force-dynamic';
 export default async function LocalLayout({ children, params}) {
  // console.log();
   unstable_setRequestLocale(params.locale);
-  const global = await fetchData('global', {version: 'draft', language: params.locale})
-  const contactForm = await fetchData('blog-contact', {version: 'draft', language: params.locale})
-
   const allowedLocales = ["ru", "en", "id"];
 
   const locale = allowedLocales.includes(params.locale)
       ? params.locale
       : "en";
 
+  const [global, contactForm] = await Promise.all([
+    fetchData('global', { language: locale }),
+    fetchData('blog-contact', { language: locale }),
+  ]);
 
-  const {data: globalStrapi
-  } = await fetchStrapi({
-     path: '/api/global',
-     query: {
-        populate: globalPopulate,
-       locale: locale,
-     },
-  });
+  const globalContent = global?.data?.story?.content || {};
+  const topMenu = globalContent.linkMenu?.[0] || {};
+  const secondMenu = globalContent.linkMenu?.[1] || {};
 
-  console.log(globalStrapi?.header);
+  function resolveLink(link) {
+    if (!link) return '';
+    if (typeof link === 'string') return link;
+    return link.cached_url || link.url || '';
+  }
 
-  const footer = {
-    title: globalStrapi?.footer?.title,
-    description: globalStrapi?.footer?.description,
-    contactLabel: globalStrapi?.footer?.contactLabel,
-    contactLink: globalStrapi?.footer?.contactLink,
-    navigationLabel: globalStrapi?.footer?.navigationLabel,
-    homeLinkLabel: globalStrapi?.footer?.homeLinkLabel,
-    copyright: globalStrapi?.footer?.copyright,
-    privacyLabel: globalStrapi?.footer?.privacyLabel,
-    privacyLink: globalStrapi?.footer?.privacyLink,
-    offerLabel: globalStrapi?.footer?.offerLabel,
-    offerLink: globalStrapi?.footer?.offerLink,
-    contactUsLabel: globalStrapi?.footer?.contactUsLabel,
-    address: globalStrapi?.footer?.address,
-    linksMenu: globalStrapi?.footer?.linkBlock,
-   };
+  function mapLinks(links = []) {
+    return links.map(item => ({
+      label: item.label,
+      link: resolveLink(item.link),
+      contact: item.contact || false,
+    }));
+  }
 
   const headMenu = {
-      links: globalStrapi?.header?.menu,
-      socials: globalStrapi?.header?.socials,
-      mail: globalStrapi?.header?.email,
-      icon: globalStrapi?.header?.icon,
-      iconBlack: globalStrapi?.header?.iconBlack,
-      imageWhatsapp: globalStrapi?.header?.imageWhatsapp,
-      ImageWpBlock: globalStrapi?.header?.imageWpBlack,
-      whatsappNumber: globalStrapi?.header?.numberWhatsapp,
-      whatsappLabel: globalStrapi?.header?.whatsappLabel,
+    links: mapLinks(topMenu.links),
+    socials: (topMenu.socials || []).map(s => ({
+      name: s.nameSoc,
+      link: resolveLink(s.link),
+    })),
+    whatsappNumber: topMenu.whatsappNumber || '',
+    whatsappLabel: topMenu.numberWhatsapp || '',
+    imageWhatsapp: { url: topMenu.imageWhatsapp?.filename || '', alternativeText: '' },
+    icon: { url: topMenu.iconBlack?.filename || '', alternativeText: '' },
+    mail: topMenu.label || '',
   };
-  //console.log(headMenu);
-  const menu = global?.data?.story?.content?.linkMenu?.[1];
+
+  const menu = {
+    siteName: secondMenu.siteName || '',
+    siteDescription: secondMenu.siteDescription || '',
+    links: mapLinks(secondMenu.links),
+  };
+
+  const footer = {
+    title: globalContent.title || '',
+    description: globalContent.description || '',
+    contactLabel: globalContent.contactLabel || '',
+    contactLink: resolveLink(globalContent.contactLink),
+    navigationLabel: globalContent.navigationLabel || '',
+    homeLinkLabel: globalContent.homeLinkLabel || '',
+    copyright: globalContent.copyright || '',
+    privacyLabel: globalContent.privacyLabel || '',
+    privacyLink: resolveLink(globalContent.privacyLink),
+    offerLabel: globalContent.offerLabel || '',
+    offerLink: resolveLink(globalContent.offerLink),
+    contactUsLabel: globalContent.contactUsLabel || '',
+    address: globalContent.address || '',
+    linksMenu: mapLinks(globalContent.linksMenu),
+  };
 
 
   return (

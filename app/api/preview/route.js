@@ -22,7 +22,7 @@ export async function POST(request) {
   }
 
   try {
-    const { content, locale } = await request.json();
+    const { content, locale, slug } = await request.json();
     if (!content) {
       return Response.json({ error: 'Missing content' }, { status: 400, headers: corsHeaders() });
     }
@@ -31,6 +31,7 @@ export async function POST(request) {
     previewStore.set(token, {
       content,
       locale: locale || 'en',
+      slug: slug || '',
     });
 
     return Response.json({ token }, { headers: corsHeaders() });

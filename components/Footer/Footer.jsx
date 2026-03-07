@@ -18,7 +18,7 @@ const  Footer = ({links, sitename, footer}) => {
     const locale = useLocale();
 
     const filteredLinks = (itemLinks || []).filter((e) => {
-        return !(locale === 'id' && e.link.url.includes('blog'));
+        return !(locale === 'id' && (e.link || '').includes('blog'));
     })
 
     return (

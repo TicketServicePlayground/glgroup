@@ -43,7 +43,7 @@ const NotFoundPage = () => {
         };
 
         document.title = titles[local] || titles['en'];
-        document.querySelector('meta[name="description"]').setAttribute('content', descriptions[local] || descriptions['en']);
+        document.querySelector('meta[name="description"]')?.setAttribute('content', descriptions[local] || descriptions['en']);
     }, [local]);
 
     const en = {
