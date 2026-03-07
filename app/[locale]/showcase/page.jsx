@@ -93,9 +93,10 @@ export async function getPosts(locale) {
 
 export default async function Page({params: {locale}}) {
     unstable_setRequestLocale(locale);
-    const {data} = await fetchData('showcase/index', {version: 'draft', language: locale})
+    const showcaseResult = await fetchData('showcase/index', {version: 'draft', language: locale});
+    const data = showcaseResult?.data;
     const fetch = await getPosts(locale);
-    const posts = fetch.data.stories;
+    const posts = fetch?.data?.stories ?? [];
     const category = await getCategory(locale);
 
 

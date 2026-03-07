@@ -8,10 +8,11 @@ export const revalidate = 3600;
 
 export async function generateMetadata({params: {locale}},parent){
     unstable_setRequestLocale(locale);
-    const {data} = await fetchData(`/services/index`, {version: 'draft', language: locale});
+    const result = await fetchData(`/services/index`, {version: 'draft', language: locale});
+    const content = result?.data?.story?.content;
     return{
-        title: data.story.content.metaTitle,
-        description: data.story.content.metaDescription,
+        title: content?.metaTitle,
+        description: content?.metaDescription,
         alternates: {
             canonical: './',
             languages: {
@@ -22,12 +23,12 @@ export async function generateMetadata({params: {locale}},parent){
         },
         openGraph:{
             siteName: "GLG Consult",
-            title: data.story.content.metaTitle,
-            description: data.story.content.metaDescription,
+            title: content?.metaTitle,
+            description: content?.metaDescription,
             images:[
                 {
-                    url: data.story.content?.metaImage?.filename,
-                    alt: data.story.content?.metaImageAlt,
+                    url: content?.metaImage?.filename,
+                    alt: content?.metaImageAlt,
                 }
             ],
         },
@@ -36,7 +37,8 @@ export async function generateMetadata({params: {locale}},parent){
 
 export default async function Page({params: {locale}}) {
     unstable_setRequestLocale(locale);
-    const {data} = await fetchData(`/services/index`, {version: 'draft', language: locale});
+    const result = await fetchData(`/services/index`, {version: 'draft', language: locale});
+    const data = result?.data;
     return (
         <DynamicComponent blok={data?.story.content} />
     );

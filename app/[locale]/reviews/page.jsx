@@ -7,7 +7,8 @@ import React from "react";
 
 export default async function Page({params: {locale}}) {
     unstable_setRequestLocale(locale);
-    const {data} = await fetchData("reviews", {version: 'draft', language: locale});
+    const result = await fetchData("reviews", {version: 'draft', language: locale});
+    const data = result?.data;
     return (
         <main className={"min-h-[80vh]"}>
             <Breadcrumbs links={data?.story.content.breadcrumbs}/>

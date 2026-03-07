@@ -10,11 +10,11 @@ export const revalidate = 3600;
 export async function generateMetadata({params},parent){
     const locale = params.locale;
     unstable_setRequestLocale(locale);
-    const {data} = await fetchData("about-us", {version: 'draft', language: locale});
-    //console.log(data.story.content);
+    const result = await fetchData("about-us", {version: 'draft', language: locale});
+    const content = result?.data?.story?.content;
     return{
-        title: data.story.content.metaTitle,
-        description: data.story.content.metaDescription,
+        title: content?.metaTitle,
+        description: content?.metaDescription,
         alternates: {
             canonical: './',
             languages: {
@@ -25,12 +25,12 @@ export async function generateMetadata({params},parent){
         },
         openGraph:{
             siteName: "GLG Consult",
-            title: data.story.content.metaTitle,
-            description: data.story.content.metaDescription,
+            title: content?.metaTitle,
+            description: content?.metaDescription,
             images:[
                 {
-                    url: data.story.content?.metaImage?.filename,
-                    alt: data.story.content?.metaImageAlt,
+                    url: content?.metaImage?.filename,
+                    alt: content?.metaImageAlt,
                 }
             ],
         },
@@ -38,8 +38,8 @@ export async function generateMetadata({params},parent){
 }
 export default async function Page({params: {locale}}){
     unstable_setRequestLocale(locale);
-    const {data} = await fetchData("about-us", {version: 'draft', language: locale});
-    //console.log(data);
+    const result = await fetchData("about-us", {version: 'draft', language: locale});
+    const data = result?.data;
 
     return (
         <>

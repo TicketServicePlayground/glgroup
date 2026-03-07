@@ -12,10 +12,11 @@ export async function generateMetadata({params},parent){
     unstable_setRequestLocale(locale);
     // let locale = params.locale;
     // unstable_setRequestLocale(locale);
-    const {data} = await fetchData("index", {version: 'draft', language: locale});
+    const result = await fetchData("index", {version: 'draft', language: locale});
+    const content = result?.data?.story?.content;
     return{
-        title: data.story.content.metaTitle,
-        description: data.story.content.metaDescription,
+        title: content?.metaTitle,
+        description: content?.metaDescription,
         alternates: {
             canonical: './',
             languages: {
@@ -25,12 +26,12 @@ export async function generateMetadata({params},parent){
         },
         openGraph:{
             siteName: "GLG Consult",
-            title: data.story.content.metaTitle,
-            description: data.story.content.metaDescription,
+            title: content?.metaTitle,
+            description: content?.metaDescription,
             images:[
                 {
-                    url: data.story.content?.metaImage?.filename,
-                    alt: data.story.content.metaImageAlt,
+                    url: content?.metaImage?.filename,
+                    alt: content?.metaImageAlt,
                 }
             ],
         },
@@ -39,7 +40,8 @@ export async function generateMetadata({params},parent){
 export default async function Home({params}) {
     const locale = params.locale;
     unstable_setRequestLocale(locale);
-    const {data} = await fetchData("index", {version: 'draft', language: locale});
+    const result = await fetchData("index", {version: 'draft', language: locale});
+    const data = result?.data;
     return (
         <>
             <Organization />

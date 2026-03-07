@@ -81,9 +81,10 @@ export async function getPosts(locale){
 export default async function Page ({params: {locale}}){
     unstable_setRequestLocale(locale);
     const fetch = await getPosts(locale);
-    const posts = fetch.data.stories;
+    const posts = fetch?.data?.stories ?? [];
     const category = await getCategory(locale);
-    const {data} = await fetchData('blog/index', {version: 'draft', language: locale})
+    const blogResult = await fetchData('blog/index', {version: 'draft', language: locale});
+    const data = blogResult?.data;
 
 
     const breadcrumbs = [
