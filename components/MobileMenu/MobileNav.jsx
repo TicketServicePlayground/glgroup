@@ -1,19 +1,17 @@
 'use client';
-import React, {useEffect} from 'react';
+import React from 'react';
 import styles from './MobileMenu.module.scss';
 import Link from "next/link";
 import clsx from "clsx";
-import Image from "next/image";
-import {useRouter} from "next/navigation";
 import {useLocale} from "next-intl";
-import {getStrapiMedia} from "@/lib/strapi/ui/getStrapiMedia";
 
 const MobileNav = ({datas, setShowNav, contactUs, type}) => {
     const number = datas?.whatsappNumber;
     const locale = useLocale();
 
     const filteredLinks = (datas?.links || []).filter((e) => {
-        return !(locale === 'id' && e.link.url.includes('blog'));
+        const url = e.link?.url || e.link || '';
+        return !(locale === 'id' && url.includes('blog'));
     })
     console.log(datas);
 
@@ -109,38 +107,39 @@ const MobileNav = ({datas, setShowNav, contactUs, type}) => {
                     {datas?.socials && datas.socials.map((e, _uid) => (
                         <Link href={e.link}
                               key={_uid} onClick={()=>(setShowNav(false))}>
-                            {type ? (<Image src={getStrapiMedia(e.blackImage.url)} width={'34'} height={'34'} alt={e.blackImage.alternativeText}></Image>):(
-                            <Image src={getStrapiMedia(e.image.url)} width={'34'} height={'34'} alt={e.image.alternativeText}></Image>
-                                )}
+                            {e.name === 'telegram' && (
+                                <i className={clsx(type ? styles.blackIcon : styles.whiteIcon)}>
+                                    <svg width="21" height="18" viewBox="0 0 21 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M18.6646 0.716942L0.934606 7.55394C-0.275394 8.03994 -0.268393 8.71494 0.712607 9.01594L5.26461 10.4359L15.7966 3.79094C16.2946 3.48794 16.7496 3.65094 16.3756 3.98294L7.84261 11.6839H7.84061L7.84261 11.6849L7.52861 16.3769C7.98861 16.3769 8.19161 16.1659 8.44961 15.9169L10.6606 13.7669L15.2596 17.1639C16.1076 17.6309 16.7166 17.3909 16.9276 16.3789L19.9466 2.15094C20.2556 0.911942 19.4736 0.350942 18.6646 0.716942Z" fill="currentColor"/>
+                                    </svg>
+                                </i>
+                            )}
                         </Link>
                     ))}
                 </div>
                 <div className={styles.contact}>
                     <Link href={'mailto:' + datas.mail}
                           className={'flex gap-3 items-center hover:text-yellow-active '} onClick={()=>(setShowNav(false))}>
-                        {type ? (
-                            <Image src={getStrapiMedia(datas.iconBlack.url)} width={'24'} height={'24'} alt={datas.iconBlack.alternativeText}/>
-                        ) : (
-                            <Image src={getStrapiMedia(datas.icon.url)} width={'24'} height={'24'} alt={datas.icon.alternativeText}/>
-                        )}
-
+                        <i className={clsx(type ? styles.blackIcon : styles.whiteIcon)}>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22 7.53503L22 17C22.0001 17.7653 21.7077 18.5016 21.1827 19.0583C20.6577 19.615 19.9399 19.9502 19.176 19.995L19 20L5 20C4.2348 20.0001 3.49847 19.7078 2.94174 19.1827C2.38498 18.6578 2.0499 17.9399 2.005 17.176L2 17L2 7.53503L11.445 13.832L11.561 13.8981C11.6977 13.9648 11.8478 13.9995 12 13.9995C12.1522 13.9995 12.3023 13.9648 12.439 13.8981L12.555 13.832L22 7.53503Z" fill="currentColor"/>
+                                <path d="M19.0001 4C20.0801 4 21.0271 4.56995 21.5551 5.427L12.0001 11.797L2.44507 5.427C2.6958 5.01978 3.04028 4.67834 3.44977 4.4314C3.85928 4.18433 4.3219 4.03882 4.79907 4.00696L5.00006 4L19.0001 4Z" fill="currentColor"/>
+                            </svg>
+                        </i>
                         <span className={'font-gilroy font-bold text-sm'}>{datas.mail}</span>
                     </Link>
                     <Link href={'https://wa.me/' + number} className="flex gap-3 hover:text-yellow-active" onClick={()=>(setShowNav(false))}>
-                        {type ? (
-                            <Image src={getStrapiMedia(datas.ImageWpBlock.url)} width={'24'} height={'24'}
-                                   alt={datas.ImageWpBlock.alt}/>
-                        ): (
-                            <Image src={getStrapiMedia(datas.imageWhatsapp.url)} width={'24'} height={'24'}
-                                   alt={datas.imageWhatsapp.alt}/>
-                        )}
-
+                        <i className={clsx(type ? styles.blackIcon : styles.whiteIcon)}>
+                            <svg width="24" height="24" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19.925 5.35997C16.79 0.499965 10.37 -0.940034 5.40499 2.07497C0.559989 5.08997 -1.00001 11.66 2.13499 16.505L2.38999 16.895L1.33999 20.825L5.26999 19.775L5.65999 20.03C7.35499 20.945 9.19999 21.47 11.03 21.47C12.995 21.47 14.96 20.945 16.655 19.895C21.5 16.745 22.94 10.31 19.925 5.32997V5.35997ZM17.18 15.47C16.655 16.25 15.995 16.775 15.08 16.91C14.555 16.91 13.895 17.165 11.285 16.13C9.06499 15.08 7.21999 13.37 5.91499 11.405C5.13499 10.49 4.72999 9.30497 4.60999 8.11997C4.60999 7.06997 4.99999 6.15497 5.65999 5.49497C5.91499 5.23997 6.18499 5.10497 6.43999 5.10497H7.09999C7.35499 5.10497 7.62499 5.10497 7.75999 5.62997C8.01499 6.28997 8.67499 7.86497 8.67499 7.99997C8.80999 8.13497 8.74999 9.13997 8.14999 9.70997C7.81999 10.085 7.75999 10.1 7.89499 10.37C8.41999 11.15 9.07999 11.945 9.72499 12.605C10.505 13.265 11.3 13.79 12.215 14.18C12.47 14.315 12.74 14.315 12.875 14.045C13.01 13.79 13.655 13.13 13.925 12.86C14.18 12.605 14.315 12.605 14.585 12.725L16.685 13.775C16.94 13.91 17.21 14.03 17.345 14.165C17.48 14.555 17.48 15.08 17.21 15.47H17.18Z" fill="currentColor"/>
+                            </svg>
+                        </i>
                         <span className={'font-gilroy font-bold text-xl'}>{datas.whatsappLabel}</span>
                     </Link>
                 </div>
                 <div className={styles.contactUs}>
                     <Link
-                        href={contactUs.link.cached_url}
+                        href={contactUs.link || ''}
                         className={styles.button} onClick={()=>(setShowNav(false))}>
                         {contactUs.label}
                     </Link>
