@@ -6,6 +6,7 @@ import {useLocale} from "next-intl";
 
 const Breadcrumbs = ({links, author}) => {
     const locale = useLocale();
+    if (!links || !Array.isArray(links) || links.length === 0) return null;
    const lastSearch = (arr) =>{
        for(let i =0; i<arr.length; i++){
             if(i === arr.length-1){

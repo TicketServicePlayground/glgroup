@@ -37,18 +37,20 @@ const PosePreview = ({blok, other, locale}) => {
     const postContent = (
         <div {...storyblokEditable(blok)} className={styles.postPreview}>
             <div className={clsx(styles.imgBlock, other && styles.other)}>
-                <Image
-                    src={blok.content.img?.filename}
-                    alt={blok.content.img?.alt}
-                    fill
-                    quality={80}
-                    sizes="(max-width: 768px) 50vw,
+                {blok.content.img?.filename ? (
+                    <Image
+                        src={blok.content.img.filename}
+                        alt={blok.content.img?.alt || ''}
+                        fill
+                        quality={80}
+                        sizes="(max-width: 768px) 50vw,
                                  (max-width: 1200px) 25vw,
                                  25vw"
-                    style={{
-                        objectFit: "cover",
-                    }}
-                />
+                        style={{
+                            objectFit: "cover",
+                        }}
+                    />
+                ) : null}
             </div>
             <div className={clsx(styles.contentBlock, other && styles.other)}>
                 <div className={clsx("flex justify-between", other ? "mb-2" : 'mb-4')}>
