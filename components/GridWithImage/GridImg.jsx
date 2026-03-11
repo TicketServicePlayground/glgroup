@@ -5,8 +5,10 @@ import Image from "next/image";
 import {storyblokEditable} from "@/lib/storyblokCompat";
 
 const GridImg = ({blok}) => {
+    const href = blok?.link?.cached_url || blok?.link?.url || '';
     return (
-        <Link href={blok.link.cached_url} className={styles.item} {...storyblokEditable(blok)}>
+        href ? (
+        <Link href={href} className={styles.item} {...storyblokEditable(blok)}>
             <div className={styles.textBlock}>
                 <div className={styles.titleBlock}>
                     {/*<span className={styles.number}>{blok.number}</span>*/}
@@ -32,6 +34,7 @@ const GridImg = ({blok}) => {
                 />
             </div>
         </Link>
+        ) : null
     );
 };
 

@@ -55,9 +55,15 @@ export default function Slider({items}) {
                                     {e?.description && (
                                         <span className={'text-white text-sm md:text-xl font-medium text-center md:text-left  block md:w-[80%]'}>{e.description}</span>
                                     )}
-                                    <Link href={e.link.cached_url} className={styles.button}>
-                                        {e.button}
-                                    </Link>
+                                    {(() => {
+                                        const href = e?.link?.cached_url || e?.link?.url || '';
+                                        if (!href) return null;
+                                        return (
+                                            <Link href={href} className={styles.button}>
+                                                {e.button}
+                                            </Link>
+                                        );
+                                    })()}
 
                                 </div>
 

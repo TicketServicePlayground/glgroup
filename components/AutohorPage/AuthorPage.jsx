@@ -32,11 +32,15 @@ const AuthorPage = ({blok}) => {
                                 </div>
                             </div>
                             <div className={styles.socials}>
-                                {blok?.socials && blok.socials.map((e, _uid) => (
-                                    <Link href={e.link.cached_url} className={styles.item} key={_uid}>
-                                        <Image src={e.image.filename} alt={e.image.alt} width={29} height={29}/>
-                                    </Link>
-                                ))}
+                                {blok?.socials && blok.socials.map((e, _uid) => {
+                                    const href = e?.link?.cached_url || e?.link?.url || '';
+                                    if (!href) return null;
+                                    return (
+                                        <Link href={href} className={styles.item} key={_uid}>
+                                            <Image src={e.image.filename} alt={e.image.alt} width={29} height={29}/>
+                                        </Link>
+                                    );
+                                })}
                             </div>
                         </div>
 
@@ -44,14 +48,21 @@ const AuthorPage = ({blok}) => {
                     <div className={styles.posts}>
                         <div className={styles.label}>{blok.postLabel}</div>
                         <div className={styles.postLinks}>
-                            {blok?.postLinks && blok.postLinks.map((e, _uid)=>(
-                                <Link href={e.link.linktype === 'story' ? '/'+e.link.cached_url : e.link.cached_url}
-                                      key={_uid}
-                                    className={styles.link}
-                                >
-                                    {e.label}
-                                </Link>
-                            ))}
+                            {blok?.postLinks && blok.postLinks.map((e, _uid)=>{
+                                const raw = e?.link;
+                                const cached = raw?.cached_url || raw?.url || '';
+                                const href = raw?.linktype === 'story' ? (cached ? '/' + cached : '') : cached;
+                                if (!href) return null;
+                                return (
+                                    <Link
+                                        href={href}
+                                        key={_uid}
+                                        className={styles.link}
+                                    >
+                                        {e.label}
+                                    </Link>
+                                );
+                            })}
                         </div>
                     </div>
                 </div>

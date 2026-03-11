@@ -28,11 +28,15 @@ const ContactMap = ({blok}) => {
                     <Link href={'https://wa.me/'+blok.wpNumber} className={styles.wp}>{blok.wpLabel}</Link>
                     <Link href={"mailto:"+blok.email} className={styles.email}><b>e-mail: </b>{blok.email}</Link>
                     <div className={styles.socials}>
-                        {blok?.socials && blok.socials.map((e, _uid)=>(
-                            <Link href={e.link.cached_url} className={styles.item} key={_uid}>
-                                <Image src={e.image.filename} alt={e.image.alt} width={32} height={32}/>
-                            </Link>
-                        ))}
+                        {blok?.socials && blok.socials.map((e, _uid)=>{
+                            const href = e?.link?.cached_url || e?.link?.url || '';
+                            if (!href) return null;
+                            return (
+                                <Link href={href} className={styles.item} key={_uid}>
+                                    <Image src={e.image.filename} alt={e.image.alt} width={32} height={32}/>
+                                </Link>
+                            );
+                        })}
                     </div>
                 </div>
             </div>

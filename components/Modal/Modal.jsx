@@ -1,6 +1,5 @@
 'use client'
 import React, {useEffect, useState} from 'react';
-import Link from "next/link";
 import clsx from "clsx";
 import {useLocale} from "next-intl";
 import styles from "./Modal.module.scss";
@@ -43,18 +42,18 @@ const Modal = ({object, uid, type, contactForm}) => {
 
     return (
         <>
-            <Link href={createLink(object.link)}
-                  onClick={(e) => {
-                      e.preventDefault();
-                      openModal();
-                  }}
-                  key={uid}
-                  className={clsx(!object.contact && type ? 'hover:bg-text-green-active' :'hover:bg-text-yellow-active',
-                      object.contact && !type && 'border-yellow-active text-yellow-active border rounded-3xl lg:px-2.5 lg:py-2 xl:px-3 xl:py-2.5 hover:bg-yellow-active hover:text-black',
-                      object.contact && type && 'border-green-active text-green-active border rounded-3xl lg:px-2.5 lg:py-2 xl:px-3 xl:py-2.5 hover:bg-green-active hover:text-black')}
+            <button
+                type="button"
+                onClick={openModal}
+                key={uid}
+                className={clsx(
+                    !object.contact && type ? 'hover:bg-text-green-active' : 'hover:bg-text-yellow-active',
+                    object.contact && !type && 'border-yellow-active text-yellow-active border rounded-3xl lg:px-2.5 lg:py-2 xl:px-3 xl:py-2.5 hover:bg-yellow-active hover:text-black',
+                    object.contact && type && 'border-green-active text-green-active border rounded-3xl lg:px-2.5 lg:py-2 xl:px-3 xl:py-2.5 hover:bg-green-active hover:text-black'
+                )}
             >
                 {object.label}
-            </Link>
+            </button>
             {isModalOpen && (
                 <div className={styles.modalOverlay} onClick={closeModal} key={uid+1}>
                     <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
