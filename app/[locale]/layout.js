@@ -207,10 +207,27 @@ export default async function LocalLayout({ children, params}) {
   const topMenu = globalContent.linkMenu?.[0] || {};
   const secondMenu = globalContent.linkMenu?.[1] || {};
 
+  const externalPrefixes = ['http://', 'https://', '//', 'mailto:', 'tel:'];
+
+  const addLocaleToPath = (url) => {
+    if (!url) return '';
+    if (url.startsWith('#')) return url;
+    if (externalPrefixes.some(prefix => url.startsWith(prefix))) return url;
+
+    if (url.startsWith('/')) {
+      const firstSegment = url.split('/')[1];
+      if (['ru', 'en', 'id'].includes(firstSegment)) return url;
+      return `/${locale}${url}`;
+    }
+
+    return `/${locale}/${url}`;
+  };
+
   function resolveLink(link) {
     if (!link) return '';
-    if (typeof link === 'string') return link;
-    return link.cached_url || link.url || '';
+    if (typeof link === 'string') return addLocaleToPath(link);
+    const raw = link.cached_url || link.url || '';
+    return addLocaleToPath(raw);
   }
 
   function mapLinks(links = []) {
